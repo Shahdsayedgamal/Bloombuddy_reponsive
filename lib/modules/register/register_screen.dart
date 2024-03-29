@@ -172,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       Container(
                         width: double.infinity,
-                        color: Colors.green[900],
+                        color: Colors.white.withOpacity(0.2),
                         child: MaterialButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
