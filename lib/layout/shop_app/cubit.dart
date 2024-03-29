@@ -1,13 +1,9 @@
 
-import 'package:bloom_buddy/layout/plant_app/states.dart';
 import 'package:bloom_buddy/layout/shop_app/shop_layout.dart';
 import 'package:bloom_buddy/layout/shop_app/states.dart';
 import 'package:bloom_buddy/modules/home/home_screen.dart';
 import 'package:bloom_buddy/modules/instructions/instructions.dart';
 import 'package:bloom_buddy/modules/profile/profile.dart';
-import 'package:bloom_buddy/modules/shop_app/categories/categories_screen.dart';
-import 'package:bloom_buddy/modules/shop_app/favorites/favorite_screen.dart';
-import 'package:bloom_buddy/modules/shop_app/settings/setting_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

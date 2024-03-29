@@ -1,7 +1,6 @@
 import 'package:bloom_buddy/layout/shop_app/shop_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'layout/plant_app/plant_layout.dart';
 import 'modules/home/home_screen.dart';
 import 'package:bloom_buddy/shared/shared.network/remote/dio_helper.dart';
 

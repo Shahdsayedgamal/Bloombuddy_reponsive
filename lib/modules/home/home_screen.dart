@@ -24,96 +24,91 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 20.0),
-              child: Text(
-                'Good Morning',
-                style: TextStyle(
-                  fontSize: 17, // Reduced font size
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.left, // Align text to the left
-              ),
-            ),
-            SizedBox(height: 20), // Increased space below the text
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: Material(
-                elevation: 4, // Set elevation
-                borderRadius: BorderRadius.circular(25.0), // Apply border radius
-                child: defaultFormField(
-                  controller: searchController,
-                  type: TextInputType.text,
-                  onChanged: (value) {},
-                  validation: (value) {
-                    if (value?.isEmpty ?? true) {
-                      return 'Search must not be empty';
-                    }
-                    return null;
-                  },
-                  label: 'Find your favourite plant here',
-                  prefix: Icons.search,
-                ),
-              ),
-            ),
-            SizedBox(height: 30), // Increased space below the search field
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      child: Image(
-                        image: AssetImage('assets/images/home1.jpg'), // Corrected file path
-                        fit: BoxFit.cover,
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, top: 20.0),
+                    child: Text(
+                      'Good Morning',
+                      style: TextStyle(
+                        fontSize: 17, // Reduced font size
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 30), // Increased space below the image
-                    Expanded(
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: 150, // Increased image width
-                                  height: 150, // Increased image height
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15), // Add border radius
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: Image.network(
-                                      'https://www.huntingforgeorge.com/wp-content/uploads/Feature-Best-Winter-Plants-Hunting-for-George-Community-Journal-extra.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Plant $index',
-                                  style: TextStyle(
-                                    fontSize: 14, // Increased text size
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                  ),
+                  SizedBox(height: 20), // Increased space below the text
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Material(
+                      elevation: 4, // Set elevation
+                      borderRadius: BorderRadius.circular(25.0), // Apply border radius
+                      child: defaultFormField(
+                        controller: searchController,
+                        type: TextInputType.text,
+                        validation: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return 'Search must not be empty';
+                          }
+                          return null;
                         },
+                        label: 'Find your favourite plant here',
+                        suffix: Icons.search,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 30), // Increased space below the search field
+                  Container(
+                    height: 300, // Set a specific height
+                    child: Image(
+                      image: AssetImage('assets/images/home1.jpg'), // Corrected file path
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                  SizedBox(height: 30), // Increased space below the image
+                  Container(
+                    height: 200, // Set a specific height
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: 150, // Increased image width
+                                height: 150, // Increased image height
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15), // Add border radius
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Image.network(
+                                    'https://www.huntingforgeorge.com/wp-content/uploads/Feature-Best-Winter-Plants-Hunting-for-George-Community-Journal-extra.jpg',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'Plant $index',
+                                style: TextStyle(
+                                  fontSize: 14, // Increased text size
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -126,10 +121,9 @@ class _HomeScreenState extends State<HomeScreen> {
 Widget defaultFormField({
   required TextEditingController controller,
   required TextInputType type,
-  required void Function(String)? onChanged,
   required String? Function(String?) validation,
   required String label,
-  required IconData prefix,
+  required IconData suffix,
 }) {
   OutlineInputBorder border = OutlineInputBorder(
     borderRadius: BorderRadius.circular(25.0),
@@ -142,7 +136,6 @@ Widget defaultFormField({
   return TextFormField(
     controller: controller,
     keyboardType: type,
-    onChanged: onChanged,
     validator: validation,
     decoration: InputDecoration(
       labelText: label,
