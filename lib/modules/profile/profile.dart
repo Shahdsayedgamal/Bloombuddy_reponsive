@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final List<String> favoriteImages = [
+   List<String> favoriteImages = [
     'https://via.placeholder.com/150',
     'https://via.placeholder.com/150',
     'https://via.placeholder.com/150',
@@ -70,6 +70,7 @@ class ProfileScreen extends StatelessWidget {
                 physics: NeverScrollableScrollPhysics(), // Added to prevent scrolling
                 children: favoriteImages.map((imageUrl) => _buildFavoritePhoto(imageUrl)).toList(),
               ),
+              SizedBox(height: 30),
             ],
           ),
         ),

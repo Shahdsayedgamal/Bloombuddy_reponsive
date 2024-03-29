@@ -29,14 +29,7 @@ class AppCubit extends Cubit<AppStates>
     ProfileScreen(),
   ];
 
-  List<String> bottomTitles = [
-    'Home Screen',
-    'Plant Care Guide',
-    'Our Store',
-    'Land Scaping Services',
-    'Plant Identfication',
-    'Profile'
-  ];
+
 
   void changeIndex(int index)
   {

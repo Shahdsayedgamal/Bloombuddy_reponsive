@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../shared/shared.components/components.dart';
 import 'cubit.dart';
 import 'states.dart';
 
@@ -11,11 +9,7 @@ class AppLayout extends StatefulWidget {
 }
 
 class _AppLayoutState extends State<AppLayout> {
-  void navigateAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => widget),
-        (Route<dynamic> route) => false,
-  );
+
 
   @override
   Widget build(BuildContext context) {
