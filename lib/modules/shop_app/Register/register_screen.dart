@@ -30,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           // Background image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/last.jpeg', // Provide your image path here
+              'assets/images/new2.jpg', // Provide your image path here
               fit: BoxFit.cover,
             ),
           ),
@@ -171,7 +171,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       Container(
                         width: double.infinity,
-                        color: Colors.green,
+                        color: Colors.green[900],
                         child: MaterialButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {

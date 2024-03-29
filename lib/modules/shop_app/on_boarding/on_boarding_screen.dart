@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import '../../../main.dart';
 import '../login/shop_login_screen.dart';
 
 class BoardingModel {
-  String title;
-   String body;
+  final String title;
+  final String body;
 
   BoardingModel({
     required this.title,
@@ -20,8 +18,8 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  var boardController = PageController();
-  List<BoardingModel> boarding = [
+  final PageController boardController = PageController();
+  final List<BoardingModel> boarding = [
     BoardingModel(
       title: 'Welcome',
       body: 'To Bloom buddy',
@@ -35,13 +33,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   ];
   bool isLast = false;
 
-  void navigateAndFinish(context, widget,) => Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(
-      builder: (context) => widget,
-    ),
-        (Route<dynamic> route) => false,
-  );
+  void navigateAndFinish(BuildContext context, Widget widget) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => widget,
+      ),
+          (Route<dynamic> route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/last.jpeg'), // Your background image path
+            image: AssetImage('assets/images/new1.jpg'), // Your background image path
             fit: BoxFit.cover,
           ),
         ),
@@ -87,7 +87,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       print('you reached the end');
                     } else {
                       print('not last');
-                      isLast = false;
+                      setState(() {
+                        isLast = false;
+                      });
                     }
                   },
                   itemBuilder: (context, index) =>
@@ -104,7 +106,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     controller: boardController,
                     effect: ExpandingDotsEffect(
                       dotColor: Colors.grey,
-                      activeDotColor: Colors.green,
+                      activeDotColor: Colors.green[900]!,
                       dotHeight: 10,
                       spacing: 5.0,
                     ),
@@ -115,13 +117,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     onPressed: () {
                       if (isLast) {
                         navigateAndFinish(context, ShopLoginScreen());
+                      } else {
+                        boardController.nextPage(
+                          duration: Duration(milliseconds: 750),
+                          curve: Curves.fastLinearToSlowEaseIn,
+                        );
                       }
-                      boardController.nextPage(
-                        duration: Duration(milliseconds: 750),
-                        curve: Curves.fastLinearToSlowEaseIn,
-                      );
                     },
-                    backgroundColor: Colors.green,
+                    backgroundColor: Colors.green[900],
                     child: Icon(Icons.arrow_forward_ios),
                   ),
                 ],
