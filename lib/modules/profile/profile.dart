@@ -1,13 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatefulWidget {
-  @override
-  _ProfileScreenState createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  List<String> favoriteImages = [
+class ProfileScreen extends StatelessWidget {
+  final List<String> favoriteImages = [
     'https://via.placeholder.com/150',
     'https://via.placeholder.com/150',
     'https://via.placeholder.com/150',
@@ -25,6 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
                 height: MediaQuery.of(context).size.height / 3,
@@ -49,7 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               SizedBox(height: 50),
-              SizedBox(height: 20),
               Center(
                 child: Text(
                   'John Doe',
@@ -73,30 +68,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        for (int i = 0; i < 3; i++)
-                          _buildFavoritePhoto(favoriteImages[i]),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        for (int i = 3; i < 6; i++)
-                          _buildFavoritePhoto(favoriteImages[i]),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        for (int i = 6; i < 9; i++)
-                          _buildFavoritePhoto(favoriteImages[i]),
-                      ],
-                    ),
-                  ),
+                  _buildFavoritePhotos(favoriteImages.sublist(0, 3)),
+                  _buildFavoritePhotos(favoriteImages.sublist(3, 6)),
+                  _buildFavoritePhotos(favoriteImages.sublist(6, 9)),
                 ],
               ),
               SizedBox(height: 200),
@@ -107,18 +81,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildFavoritePhoto(String imageUrl) {
-    return Container(
-      width: 100,
-      height: 100,
-      margin: EdgeInsets.symmetric(vertical: 5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
-        ),
-      ),
+  Widget _buildFavoritePhotos(List<String> images) {
+    return Column(
+      children: images.map((imageUrl) {
+        return Container(
+          width: 100,
+          height: 100,
+          margin: EdgeInsets.symmetric(vertical: 5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+              image: NetworkImage(imageUrl),
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
