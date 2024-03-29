@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -65,15 +64,12 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildFavoritePhotos(favoriteImages.sublist(0, 3)),
-                  _buildFavoritePhotos(favoriteImages.sublist(3, 6)),
-                  _buildFavoritePhotos(favoriteImages.sublist(6, 9)),
-                ],
+              GridView.count(
+                crossAxisCount: 3,
+                shrinkWrap: true, // Added to prevent unnecessary scrolling
+                physics: NeverScrollableScrollPhysics(), // Added to prevent scrolling
+                children: favoriteImages.map((imageUrl) => _buildFavoritePhoto(imageUrl)).toList(),
               ),
-              SizedBox(height: 200),
             ],
           ),
         ),
@@ -81,22 +77,16 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFavoritePhotos(List<String> images) {
-    return Column(
-      children: images.map((imageUrl) {
-        return Container(
-          width: 100,
-          height: 100,
-          margin: EdgeInsets.symmetric(vertical: 5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            image: DecorationImage(
-              image: NetworkImage(imageUrl),
-              fit: BoxFit.cover,
-            ),
-          ),
-        );
-      }).toList(),
+  Widget _buildFavoritePhoto(String imageUrl) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 }
