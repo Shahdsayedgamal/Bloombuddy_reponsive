@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../layout/shop_app/shop_layout.dart';
+import '../../layout/layout_app/bloom_layout.dart';
+
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -179,7 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               print(emailController.text);
                               print(passwordController.text);
                               print(confirmPasswordController.text);
-                              navigateAndFinish(context, ShopLayout());
+                              navigateAndFinish(context, AppLayout());
                             }
                           },
                           child: Text('REGISTER', style: TextStyle(color: Colors.white)),

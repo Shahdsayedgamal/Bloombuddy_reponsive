@@ -5,12 +5,12 @@ import '../../shared/shared.components/components.dart';
 import 'cubit.dart';
 import 'states.dart';
 
-class ShopLayout extends StatefulWidget {
+class AppLayout extends StatefulWidget {
   @override
-  _ShopLayoutState createState() => _ShopLayoutState();
+  _AppLayoutState createState() => _AppLayoutState();
 }
 
-class _ShopLayoutState extends State<ShopLayout> {
+class _AppLayoutState extends State<AppLayout> {
   void navigateAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(builder: (context) => widget),
@@ -20,11 +20,11 @@ class _ShopLayoutState extends State<ShopLayout> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => ShopCubit(),
-      child: BlocConsumer<ShopCubit, ShopStates>(
-        listener: (BuildContext context, ShopStates state) {},
-        builder: (BuildContext context, ShopStates state) {
-          ShopCubit cubit = ShopCubit.get(context);
+      create: (BuildContext context) => AppCubit(),
+      child: BlocConsumer<AppCubit, AppStates>(
+        listener: (BuildContext context, AppStates state) {},
+        builder: (BuildContext context, AppStates state) {
+          AppCubit cubit = AppCubit.get(context);
           return Scaffold(
             body: Column(
               children: [

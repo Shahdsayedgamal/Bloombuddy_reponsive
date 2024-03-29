@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../layout/shop_app/shop_layout.dart';
-import '../Register/register_screen.dart';
+import '../../layout/layout_app/bloom_layout.dart';
+import '../register/register_screen.dart';
 
 class ShopLoginScreen extends StatefulWidget {
   @override
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<ShopLoginScreen> {
               // Form validation successful
               print(emailController.text);
               print(passwordController.text);
-              navigateAndFinish(context, ShopLayout());
+              navigateAndFinish(context, AppLayout());
             }
           },
           child: Text('LOGIN',

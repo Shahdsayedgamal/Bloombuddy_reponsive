@@ -1,6 +1,5 @@
 
-import 'package:bloom_buddy/layout/shop_app/shop_layout.dart';
-import 'package:bloom_buddy/layout/shop_app/states.dart';
+import 'package:bloom_buddy/layout/layout_app/states.dart';
 import 'package:bloom_buddy/modules/home/home_screen.dart';
 import 'package:bloom_buddy/modules/instructions/instructions.dart';
 import 'package:bloom_buddy/modules/profile/profile.dart';
@@ -14,10 +13,10 @@ import '../../modules/plants/plants_screen.dart';
 
 
 
-class ShopCubit extends Cubit<ShopStates>
+class AppCubit extends Cubit<AppStates>
 {
-  ShopCubit(): super(ShopInitialState());
-  static ShopCubit get(context) => BlocProvider.of(context);
+  AppCubit(): super(AppInitialState());
+  static AppCubit get(context) => BlocProvider.of(context);
 
   int currentIndex = 0;
 
@@ -42,7 +41,7 @@ class ShopCubit extends Cubit<ShopStates>
   void changeIndex(int index)
   {
     currentIndex = index;
-    emit(ShopChangeBottomNavBarState());
+    emit(AppChangeBottomNavBarState());
   }
 
 }

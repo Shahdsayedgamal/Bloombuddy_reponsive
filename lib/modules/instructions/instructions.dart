@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../layout/shop_app/cubit.dart';
+import '../../layout/layout_app/cubit.dart';
+
 
 
 class InstructionsScreen extends StatelessWidget {
@@ -11,7 +12,7 @@ class InstructionsScreen extends StatelessWidget {
     searchController = TextEditingController(); // Initialize searchController
 
     return BlocProvider(
-      create: (BuildContext context) => ShopCubit(), // Provide the PlantCubit instance
+      create: (BuildContext context) => AppCubit(), // Provide the PlantCubit instance
       child: Scaffold(
         body: SafeArea(
           child: Column(

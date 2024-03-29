@@ -1,10 +1,10 @@
-import 'package:bloom_buddy/layout/shop_app/shop_layout.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'modules/home/home_screen.dart';
 import 'package:bloom_buddy/shared/shared.network/remote/dio_helper.dart';
 
-import 'modules/shop_app/on_boarding/on_boarding_screen.dart';
+import 'modules/on_boarding/on_boarding_screen.dart';
 
 
 void main() {
