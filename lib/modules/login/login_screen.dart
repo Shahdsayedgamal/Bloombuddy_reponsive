@@ -1,14 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../layout/layout_app/bloom_layout.dart';
 import '../register/register_screen.dart';
 
-class ShopLoginScreen extends StatefulWidget {
+
+
+class LoginScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState(); //holds data that can change, manages login screen, state of the login
 }
 
-class _LoginScreenState extends State<ShopLoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -31,7 +34,7 @@ class _LoginScreenState extends State<ShopLoginScreen> {
       // Background image
       Positioned.fill(
       child: Image.asset(
-        'assets/images/new2.jpg', // Provide your image path here
+        'assets/images/login.jpg', // Provide your image path here
         fit: BoxFit.cover,
       ),
     ),
@@ -44,8 +47,7 @@ class _LoginScreenState extends State<ShopLoginScreen> {
     child: Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-    SizedBox(
-    height: MediaQuery.of(context).size.height * 0.2),
+    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
     // Adjust the height as needed
     Text(
     'Login',
@@ -55,9 +57,7 @@ class _LoginScreenState extends State<ShopLoginScreen> {
     color: Colors.white,
     ),
     ),
-    SizedBox(
-    height: 30.0,
-    ),
+    SizedBox(height: 30.0),
     TextFormField(
     controller: emailController,
     keyboardType: TextInputType.emailAddress,
@@ -76,18 +76,27 @@ class _LoginScreenState extends State<ShopLoginScreen> {
     Icons.email,
     color: Colors.white,
     ),
-    border: OutlineInputBorder(),
-    fillColor: Colors.white.withOpacity(0),
-    labelStyle: TextStyle(color: Colors.white),
+    border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(25),
+    borderSide: BorderSide(
+    color: Colors.white, // Color of the border
+    width: 2.0, // Thickness of the border
+    ),
+    ),
+    fillColor: Colors.white.withOpacity(0.0),
+    filled: true,
+    labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), // Bold text
     enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.white),
+    borderSide: BorderSide(
+    color: Colors.white, // Color of the border
+    width: 2.0, // Thickness of the border
+    ),
+    borderRadius: BorderRadius.circular(25),
     ),
     ),
-    style: TextStyle(color: Colors.white),
+    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), // Bold text
     ),
-    SizedBox(
-    height: 15.0,
-    ),
+    SizedBox(height: 15.0),
     TextFormField(
     controller: passwordController,
     keyboardType: TextInputType.visiblePassword,
@@ -99,70 +108,77 @@ class _LoginScreenState extends State<ShopLoginScreen> {
     return null;
     },
     decoration: InputDecoration(
+    border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(25),
+    borderSide: BorderSide(
+    color: Colors.white, // Color of the border
+    width: 2.5, // Thickness of the border
+    ),
+    ),
     labelText: 'Password',
-    prefixIcon: Icon(Icons.lock,
-      color: Colors.white,
+    prefixIcon: Icon(
+    Icons.lock,
+    color: Colors.white,
     ),
-      suffixIcon: IconButton(
-        icon: Icon(
-          isPassword
-              ? Icons.visibility
-              : Icons.visibility_off,
-          color: Colors.white,
-        ),
-        onPressed: () {
-          setState(() {
-            isPassword = !isPassword;
-          });
-        },
-      ),
-      border: OutlineInputBorder(),
-      fillColor: Colors.white.withOpacity(0),
-      labelStyle: TextStyle(color: Colors.white),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
-      ),
+    suffixIcon: IconButton(
+    icon: Icon(
+    isPassword ? Icons.visibility : Icons.visibility_off,
+    color: Colors.white,
     ),
-      style: TextStyle(color: Colors.white),
+    onPressed: () {
+    setState(() {
+    isPassword = !isPassword;
+    });
+    },
     ),
-      SizedBox(
-        height: 15.0,
-      ),
-      Container(
-        width: double.infinity,
-        color: Colors.white.withOpacity(0.2),
-        child: MaterialButton(
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              // Form validation successful
-              print(emailController.text);
-              print(passwordController.text);
-              navigateAndFinish(context, AppLayout());
-            }
-          },
-          child: Text('LOGIN',
-              style: TextStyle(color: Colors.white)),
-        ),
-      ),
-      SizedBox(
-        height: 10.0,
-      ),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Don\'t have an account?',
-            style: TextStyle(color: Colors.white),
-          ),
-          TextButton(
-            onPressed: () {
-              navigateAndFinish(context, RegisterScreen());
-            },
-            child: Text('Sign up',
-                style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
+    fillColor: Colors.white.withOpacity(0.0),
+    filled: true,
+    labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), // Bold text
+    enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+    color: Colors.white, // Color of the border
+    width: 2.5, // Thickness of the border
+    ),
+    borderRadius: BorderRadius.circular(25),
+    ),
+    ),
+    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), // Bold text
+    ),
+    SizedBox(height: 15.0),
+    Container(
+    width: double.infinity,
+    decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(25),
+    color: Colors.white.withOpacity(0.3),
+    ),
+    child: MaterialButton(
+    onPressed: () {
+    if (formKey.currentState!.validate()) {
+    // Form validation successful
+    print(emailController.text);
+    print(passwordController.text);
+    navigateAndFinish(context, AppLayout());
+    }
+    },
+    child: Text('LOGIN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)), // Bold text
+    ),
+    ),
+    SizedBox(height: 10.0),
+    Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+    Text(
+    'Don\'t have an account?',
+    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), // Bold text
+    ),
+    TextButton(
+    onPressed: () {
+    navigateAndFinish(context, RegisterScreen());
+    },
+    child: Text('Sign up', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)), // Bold text
+    ),
+    ],
+    ),
     ],
     ),
     ),

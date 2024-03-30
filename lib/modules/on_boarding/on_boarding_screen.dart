@@ -49,7 +49,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/new1.jpg'), // Your background image path
+            image: AssetImage('assets/images/login.jpg'), // Your background image path
             fit: BoxFit.cover,
           ),
         ),
@@ -66,7 +66,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   actions: [
                     TextButton(
                       onPressed: () {
-                        navigateAndFinish(context, ShopLoginScreen());
+                        navigateAndFinish(context, LoginScreen());
                       },
                       child: Text(
                         'Skip',
@@ -116,7 +116,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   FloatingActionButton(
                     onPressed: () {
                       if (isLast) {
-                        navigateAndFinish(context, ShopLoginScreen());
+                        navigateAndFinish(context, LoginScreen());
                       } else {
                         boardController.nextPage(
                           duration: Duration(milliseconds: 750),
