@@ -45,13 +45,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ),
     // Back arrow icon
           Positioned(
-            top: 80.0,
-            left: 15.0,
+            top: 90.0,
+            left: 20.0,
             child: Container(
-              width: 40.0,
+              width: 50.0,
               height: 40.0,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(25),
                 color: Colors.white.withOpacity(0.3),
               ),
               child: IconButton(
@@ -71,10 +71,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     child: Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
+      SizedBox(
+        height: 110.0,
+      ),
     Text(
     'Register',
     style: TextStyle(
-    fontSize: 40.0,
+    fontSize: 30.0,
     fontWeight: FontWeight.bold,
     color: Colors.white,
     ),
@@ -104,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     color: Colors.white,
     ),
     border: OutlineInputBorder(
-    borderRadius: BorderRadius.circular(20),
+    borderRadius: BorderRadius.circular(25),
     borderSide: BorderSide(color: Colors.white, width: 2.0), // Adjust border thickness
     ),
     fillColor: Colors.white.withOpacity(0.0),
