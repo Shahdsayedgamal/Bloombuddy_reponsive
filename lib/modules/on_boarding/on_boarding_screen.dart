@@ -1,10 +1,12 @@
+import 'package:bloom_buddy/modules/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../login/login_screen.dart';
+
+import '../../layout/layout_app/bloom_layout.dart';
 
 class BoardingModel {
-  final String title;
-  final String body;
+  String title;
+  String body;
 
   BoardingModel({
     required this.title,
@@ -18,8 +20,8 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  final PageController boardController = PageController();
-  final List<BoardingModel> boarding = [
+  var boardController = PageController();
+  List<BoardingModel> boarding = [
     BoardingModel(
       title: 'Welcome',
       body: 'To Bloom buddy',
@@ -46,92 +48,98 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/login.jpg'), // Your background image path
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/login.jpg'), // Your background image path
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            children: [
-              // Skip button in the app bar
-              PreferredSize(
-                preferredSize: Size.fromHeight(kToolbarHeight),
-                child: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        navigateAndFinish(context, LoginScreen());
-                      },
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(color: Colors.white),
+          Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: boardController,
+                    onPageChanged: (int index) {
+                      if (index == boarding.length - 1) {
+                        setState(() {
+                          isLast = true;
+                        });
+                        print('you reached the end');
+                      } else {
+                        print('not last');
+                        isLast = false;
+                      }
+                    },
+                    itemBuilder: (context, index) =>
+                        buildBoardingItem(boarding[index]),
+                    itemCount: boarding.length,
+                  ),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                Row(
+                  children: [
+                    SmoothPageIndicator(
+                      controller: boardController,
+                      effect: ExpandingDotsEffect(
+                        dotColor: Colors.white70,
+                        activeDotColor: Colors.green[900]!,
+                        dotHeight: 10,
+                        spacing: 5.0,
                       ),
+                      count: boarding.length,
+                    ),
+                    Spacer(),
+                    FloatingActionButton(
+                      onPressed: () {
+                        if (isLast) {
+                          navigateAndFinish(context, AppLayout());
+                        } else {
+                          boardController.nextPage(
+                            duration: Duration(milliseconds: 750),
+                            curve: Curves.fastLinearToSlowEaseIn,
+                          );
+                        }
+                      },
+                      backgroundColor: Colors.green[900],
+                      child: Icon(Icons.arrow_forward_ios,color: Colors.white,),
                     ),
                   ],
                 ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 80.0,
+            right: 20.0,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: Colors.white.withOpacity(0.3),
               ),
-              Expanded(
-                child: PageView.builder(
-                  controller: boardController,
-                  onPageChanged: (int index) {
-                    if (index == boarding.length - 1) {
-                      setState(() {
-                        isLast = true;
-                      });
-                      print('you reached the end');
-                    } else {
-                      print('not last');
-                      setState(() {
-                        isLast = false;
-                      });
-                    }
-                  },
-                  itemBuilder: (context, index) =>
-                      buildBoardingItem(boarding[index]),
-                  itemCount: boarding.length,
+              child: TextButton(
+                onPressed: () {
+                  navigateAndFinish(context, LoginScreen());
+                },
+                child: Text(
+                  'Skip',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              SizedBox(
-                height: 30.0,
-              ),
-              Row(
-                children: [
-                  SmoothPageIndicator(
-                    controller: boardController,
-                    effect: ExpandingDotsEffect(
-                      dotColor: Colors.grey,
-                      activeDotColor: Colors.green[900]!,
-                      dotHeight: 10,
-                      spacing: 5.0,
-                    ),
-                    count: boarding.length,
-                  ),
-                  Spacer(),
-                  FloatingActionButton(
-                    onPressed: () {
-                      if (isLast) {
-                        navigateAndFinish(context, LoginScreen());
-                      } else {
-                        boardController.nextPage(
-                          duration: Duration(milliseconds: 750),
-                          curve: Curves.fastLinearToSlowEaseIn,
-                        );
-                      }
-                    },
-                    backgroundColor: Colors.green[900],
-                    child: Icon(Icons.arrow_forward_ios),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
