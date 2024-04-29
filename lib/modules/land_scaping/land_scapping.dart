@@ -146,7 +146,7 @@ class _LandscapeScreenState extends State<LandscapeScreen> {
                                 // Send message action
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: Colors.green[900],
+                                backgroundColor: Colors.green[900],
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(25.0),
                                 ),

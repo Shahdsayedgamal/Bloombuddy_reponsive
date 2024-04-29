@@ -1,4 +1,5 @@
 
+import 'package:bloom_buddy/modules/add_cart/add_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'modules/home/home_screen.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: OnBoardingScreen(),
+      home: AddToCartScreen(),
     );
   }
 }
