@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "741642533514",
+    "firebase_url": "https://bloombuddy-76127-default-rtdb.firebaseio.com",
+    "project_id": "bloombuddy-76127",
+    "storage_bucket": "bloombuddy-76127.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741642533514:android:042252dbb8ed7537d7cb73",
+        "android_client_info": {
+          "package_name": "com.example.bloom_buddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3ZQYHO5Bz-p7BCTGWny29Ap_Tc_zZnwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741642533514:android:0aff92e682a4184dd7cb73",
+        "android_client_info": {
+          "package_name": "com.example.bloombuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3ZQYHO5Bz-p7BCTGWny29Ap_Tc_zZnwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741642533514:android:239f63886ee8e181d7cb73",
+        "android_client_info": {
+          "package_name": "com.example.plantsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3ZQYHO5Bz-p7BCTGWny29Ap_Tc_zZnwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
