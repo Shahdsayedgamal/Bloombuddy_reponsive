@@ -1,161 +1,175 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:card_swiper/card_swiper.dart';
+import '../instructions/instructions.dart'; // Adjust the path if needed
+import 'last_Arrival.dart'; // Assuming this imports your LatestArrivalProductsWidget
 
 class HomeScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late TextEditingController searchController;
-
-  @override
-  void initState() {
-    super.initState();
-    searchController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
-  }
+  late TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0, top: 20.0),
-                    child: Text(
-                      'Good Morning',
-                      style: TextStyle(
-                        fontSize: 17, // Reduced font size
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20), // Increased space below the text
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      elevation: 4, // Set elevation
-                      borderRadius: BorderRadius.circular(25.0), // Apply border radius
-                      child: defaultFormField(
-                        controller: searchController,
-                        type: TextInputType.text,
-                        validation: (value) {
-                          if (value?.isEmpty ?? true) {
-                            return 'Search must not be empty';
-                          }
-                          return null;
-                        },
-                        label: 'Find your favourite plant here',
-                        suffix: Icons.search,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 30), // Increased space below the search field
-                  Container(
-                    height: 300, // Set a specific height
-                    child: Image(
-                      image: AssetImage('assets/images/home1.jpg'), // Corrected file path
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  SizedBox(height: 30), // Increased space below the image
-                  Container(
-                    height: 200, // Set a specific height
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 150, // Increased image width
-                                height: 150, // Increased image height
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15), // Add border radius
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: Image.network(
-                                    'https://www.huntingforgeorge.com/wp-content/uploads/Feature-Best-Winter-Plants-Hunting-for-George-Community-Journal-extra.jpg',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                'Plant $index',
-                                style: TextStyle(
-                                  fontSize: 14, // Increased text size
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+    ScreenUtil.init(context,
+        designSize: const Size(375, 812)); // iPhone X as design size example
+
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(15.w), // Responsive padding
+                child: CustomGreetingWidget(searchController: searchController),
               ),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.all(14.w), // Responsive padding
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      0.3, // Adjusted height for the swiper pictures
+                  child: Swiper(
+                    itemBuilder: (BuildContext context, int index) {
+                      return Image.asset(
+                        "assets/images/home1.jpg",
+                        fit: BoxFit.cover, // Fill the available space
+                      );
+                    },
+                    autoplay: true,
+                    itemCount: 3,
+                    pagination: const SwiperPagination(),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: EdgeInsets.only(left: 8.w, top: 15.h),
+                child: Row(
+                  children: [
+                    Text(
+                      "Latest arrival",
+                      style: TextStyle(
+                          fontSize:
+                          ScreenUtil().setSp(24)), // Responsive font size
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.28, // Screen height percentage
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return const LatestArrivalProductsWidget();
+                    }),
+              ),
+              SizedBox(
+                height: 18.h,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-Widget defaultFormField({
-  required TextEditingController controller,
-  required TextInputType type,
-  required String? Function(String?) validation,
-  required String label,
-  required IconData suffix,
-}) {
-  OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(25.0),
-    borderSide: BorderSide(
-      color: Colors.white70,
-      width: 2.0,
-    ),
-  );
+class CustomGreetingWidget extends StatelessWidget {
+  final TextEditingController searchController;
 
-  return TextFormField(
-    controller: controller,
-    keyboardType: type,
-    validator: validation,
-    decoration: InputDecoration(
-      labelText: label,
-      suffixIcon: CircleAvatar(
-        backgroundColor: Colors.green[900],
-        child: Icon(Icons.search, color: Colors.white),
-      ),
-      border: border,
-      focusedBorder: border,
-      enabledBorder: border,
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      fillColor: Colors.white,
-      filled: true,
-    ),
-  );
+  const CustomGreetingWidget({required this.searchController});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                RichText(
+                  text: TextSpan(
+                    text: 'Good morning',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: ScreenUtil().setSp(18), // Responsive font size
+                      fontWeight: FontWeight.bold,
+                    ),
+                    children: const <TextSpan>[
+                      TextSpan(text: ' 🌞', style: TextStyle(fontSize: 22)),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(8), // Responsive height
+                ),
+                Text(
+                  'Shahd sayed',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24), // Responsive font size
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  height: ScreenUtil().setHeight(5), // Responsive height
+                ),
+                Row(
+                  children: const [
+                    Icon(Icons.wb_cloudy, color: Colors.grey, size: 24),
+                    Padding(
+                      padding: EdgeInsets.only(left: 9),
+                      child: Text(
+                        'Sun Cloudy 22°',
+                        style: TextStyle(
+                          fontSize: 14, // Consider making font size responsive
+                        ),
+                      ),
+                    ),
+                    Icon(Icons.arrow_drop_down, color: Colors.black, size: 24),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(height: 20), // Add more space
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Material(
+            elevation: 4, // Set elevation
+            borderRadius: BorderRadius.circular(25.0), // Apply border radius
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    onChanged: (value) {},
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return 'Search must not be empty';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Find your favourite plant here',
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

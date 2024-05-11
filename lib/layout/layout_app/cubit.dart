@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../modules/camera/camera.dart';
 import '../../modules/land_scaping/land_scapping.dart';
-import '../../modules/plants/plants_screen.dart';
+import '../../modules/store/store_screen.dart';
 
 
 
@@ -23,7 +23,7 @@ class AppCubit extends Cubit<AppStates>
   List<Widget> bottomScreens = [
     HomeScreen(),
     InstructionsScreen(),
-    PlantsScreen(),
+    StoreScreen(),
     LandscapeScreen(),
     CameraScreen(),
     ProfileScreen(),

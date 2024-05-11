@@ -1,91 +1,158 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:bloom_buddy/modules/profile/theme_provider.dart';
+import 'CustomListTitle.dart';
+import 'app_name_text.dart';
 
 class ProfileScreen extends StatelessWidget {
-   List<String> favoriteImages = [
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-    'https://via.placeholder.com/150',
-  ];
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
+        body: SingleChildScrollView( // Wrap with SingleChildScrollView
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 3,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/profile2.jpg'),
-                    fit: BoxFit.cover,
+              const Visibility(
+                visible: false,
+                child: Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text(
+                    "Please log in to get full access",
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
-                child: Stack(
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
                   children: [
-                    Positioned(
-                      left: 16,
-                      bottom: 16,
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.black,
-                        backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+                    Container(
+                      height: 60,
+                      width: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).cardColor,
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.background,
+                          width: 3,
+                        ),
+                        image: const DecorationImage(
+                          image: NetworkImage(
+                            "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png",
+                          ),
+                          fit: BoxFit.fill,
+                        ),
                       ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text("Shahd sayed"), // Correct widget if needed
+                        Text(
+                          "eslam2002eslam@gmail.com",
+                          style: TextStyle(fontSize: 15), // Set appropriate style
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: 50),
-              Center(
-                child: Text(
-                  'John Doe',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text("GENERAL"), // Correct widget if needed
+                    CustomListTile(
+                      imagePath: "assets/images/profile2.jpg",
+                      text: "ALL ORDERS",
+                      function: () {},
+                    ),
+                    CustomListTile(
+                      imagePath: "assets/images/profile2.jpg",
+                      text: "VIEWED RECENTLY",
+                      function: () {},
+                    ),
+                    CustomListTile(
+                      imagePath: "assets/images/profile2.jpg",
+                      text: "ADDRESS",
+                      function: () {},
+                    ),
+                    CustomListTile(
+                      imagePath: "assets/images/profile2.jpg",
+                      text: "FAVORITES",
+                      function: () {},
+                    ),
+                    const SizedBox(
+                      height: 0,
+                    ),
+                    const Divider(
+                      thickness: 4,
+                    ),
+                    const SizedBox(
+                      height: 0,
+                    ),
+                    const Text("Setting"), // Correct widget if needed
+                    SwitchListTile(
+                      secondary: Image.asset(
+                        "assets/images/profile2.jpg",
+                        height: 40,
+                      ),
+                      title: Text(
+                        themeProvider.getIsDarkTheme ? "DARK MODE" : "LIGHT MODE",
+                      ),
+                      value: themeProvider.getIsDarkTheme,
+                      onChanged: (value) {
+                        themeProvider.setDarkTheme(themeValue: value);
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Divider(
+                      thickness: 4,
+                    ),
+                    CustomListTile(
+                      imagePath: "assets/images/profile2.jpg",
+                      text: "privacy and terms",
+                      function: () {},
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 20),
               Center(
-                child: Text(
-                  'Favorites',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[900],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.login,
+                    color: Colors.white, // Set icon color to white
+                  ),
+                  label: Text(
+                    "LOGIN",
+                    style: TextStyle(color: Colors.white), // Set text color to white
+                  ),
+      
                 ),
               ),
-              SizedBox(height: 10),
-              GridView.count(
-                crossAxisCount: 3,
-                shrinkWrap: true, // Added to prevent unnecessary scrolling
-                physics: NeverScrollableScrollPhysics(), // Added to prevent scrolling
-                children: favoriteImages.map((imageUrl) => _buildFavoritePhoto(imageUrl)).toList(),
-              ),
-              SizedBox(height: 30),
+              const SizedBox(height: 20), // Add extra space at the bottom if needed
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFavoritePhoto(String imageUrl) {
-    return Container(
-      margin: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
         ),
       ),
     );
