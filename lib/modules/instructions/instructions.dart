@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../home/last_Arrival.dart';
 import 'flowers.dart';
 import 'herbs.dart';
-import 'plant_guide.dart';
+
 
 class InstructionsScreen extends StatefulWidget {
   @override
