@@ -121,7 +121,6 @@ class Seedsdesign extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 5),
                   Text(
                     "Time to grow:",
                     style: TextStyle(
@@ -138,6 +137,7 @@ class Seedsdesign extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 5),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
