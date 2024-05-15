@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AddToCartScreen extends StatefulWidget {
@@ -7,13 +8,14 @@ class AddToCartScreen extends StatefulWidget {
 
 class _AddToCartScreenState extends State<AddToCartScreen> {
   bool showFullDescription = false;
+  int productCount = 1;
 
   void navigateTo(context, widget) => Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => widget,
-    ),
-  );
+        context,
+        MaterialPageRoute(
+          builder: (context) => widget,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -24,187 +26,238 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
         'Description: This is a description of the plant. It can be a long text to describe the features and care instructions for the plant.';
 
     String descriptionToShow =
-    showFullDescription ? longDescription : shortDescription;
+        showFullDescription ? longDescription : shortDescription;
 
     String descriptionButtonText =
-    showFullDescription ? 'Show Less' : 'Show More';
+        showFullDescription ? 'Show Less' : 'Show More';
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey.withOpacity(0.5), // Set the app bar background color to grey
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20.0), // Adjust padding from the left
-          child: Container(
-            width: 50.0,
-            height: 40.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.green[900],
+      body: Stack(
+        children: [
+          // Image
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: MediaQuery.of(context).size.height * 0.5,
+            child:
+          Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                ),
+                border: Border.all(
+                  color: Colors.green.shade900,
+                  width: 2,
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                ),
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: Image.asset(
+                  'assets/images/flower.jpeg',
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
-            child: Icon(Icons.arrow_back_rounded, color: Colors.white),
           ),
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.grey.withOpacity(0.5),
-              Colors.white.withOpacity(0.5),
-            ],
+          // Arrow button
+          Positioned(
+            top: 40.0,
+            left: 20.0,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                width: 50.0,
+                height: 40.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.green[900],
+                ),
+                child: Icon(Icons.arrow_back_rounded, color: Colors.white),
+              ),
+            ),
           ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Image
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.3,
-                    child: Image.asset(
-                      'assets/images/flower.jpeg',
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  // Blended Container
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white, // Set background color of the container to white
-                      borderRadius: BorderRadius.circular(12.0), // Add border radius
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 3,
-                          blurRadius: 5,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
+          // Content
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.5,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white,
+                    Colors.white,
+                  ],
+                ),
+              ),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(
-                          'Plant Name',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        // Features and Alerts
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Column(
-                            children: [
-                              // Feature 1
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Price',
-                                      style: TextStyle(
-                                        fontSize: 18, // Increased font size
-                                        fontWeight: FontWeight.bold,
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'FLOWER NAME',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Price
+                                Text(
+                                  '\$29.99',
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                // Counter Container
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[900],
+                                      borderRadius: BorderRadius.circular(25.0),
+                                    ),
+                                    child: Container(
+                                      width: 150,
+                                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          IconButton(
+                                            icon: Icon(Icons.remove),
+                                            onPressed: () {
+                                              setState(() {
+                                                if (productCount > 1) {
+                                                  productCount--;
+                                                }
+                                              });
+                                            },
+                                            color: Colors.white,
+                                          ),
+                                          Text(
+                                            '$productCount',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.add),
+                                            onPressed: () {
+                                              setState(() {
+                                                productCount++;
+                                              });
+                                            },
+                                            color: Colors.white,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '\$29.99',
-                                      style: TextStyle(fontSize: 18, // Increased font size
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
+                              ],
+                            ),
+
+
+
+                            SizedBox(height: 16),
+                            Text(
+                              'Description',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
-                              // Add more features and alerts as needed
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        // Description Title
-                        Text(
-                          'Description',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        // Description
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              showFullDescription = !showFullDescription;
-                            });
-                          },
-                          child: Text(
-                            descriptionToShow,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
                             ),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        // Show More/Less button
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              showFullDescription = !showFullDescription;
-                            });
-                          },
-                          child: Text(
-                            descriptionButtonText,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.green[900],
+                            SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showFullDescription = !showFullDescription;
+                                });
+                              },
+                              child: Text(
+                                descriptionToShow,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        // Add to Cart Button
-                        ElevatedButton(
-                          onPressed: () {
-                            // Handle add to cart
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: Text(
-                              'Add to Cart',
-                              style: TextStyle(fontSize: 20),
+                            SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  showFullDescription = !showFullDescription;
+                                });
+                              },
+                              child: Text(
+                                descriptionButtonText,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.green[900],
+                                ),
+                              ),
                             ),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.green[900]!),
-                            foregroundColor: MaterialStateProperty.all(Colors.white),
-                          ),
+                            SizedBox(height: 16),
+                            // Counter
+
+                            SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Handle add to cart
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                child: Text(
+                                  'Add to Cart',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Colors.green[900]!),
+                                foregroundColor:
+                                    MaterialStateProperty.all(Colors.white),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

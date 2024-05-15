@@ -1,119 +1,94 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bloom_buddy/modules/store/seeds.dart';
 import 'package:flutter/material.dart';
-import 'Product_card.dart';
+import '../home/last_Arrival.dart';
+import '../instructions/flowers.dart';
+import '../instructions/herbs.dart';
+import '../instructions/vegetables.dart';
+
 
 class StoreScreen extends StatefulWidget {
   @override
-  State<StoreScreen> createState() => _StoreScreenState();
+  _StoreScreenState createState() => _StoreScreenState();
 }
 
 class _StoreScreenState extends State<StoreScreen> {
-  List<Map<String, dynamic>> plantsData = [];
-
-  Future<void> getData() async {
-    try {
-      QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("flowers").get();
-      // Convert documents to Map and store in state variable
-      setState(
-            () {
-          plantsData = querySnapshot.docs
-              .map((doc) => doc.data() as Map<String, dynamic>)
-              .where((data) =>
-          data['name'] != null &&
-              data['image'] != null &&
-              data['indoor___outdoor'] != null)
-              .toList();
-        },
-      );
-    } catch (e) {
-      print('Error fetching data: $e');
-      // Optionally, you can display an error message to the user
-    }
-  }
+  late TextEditingController searchController;
+  late PageController pageController;
+  String? _selectedCategory;
 
   @override
   void initState() {
     super.initState();
-    getData();
+    searchController = TextEditingController();
+    pageController = PageController();
   }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    pageController.dispose();
+    super.dispose();
+  }
+
+  void _navigateToPage(int index) {
+    pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    late TextEditingController searchController;
-
-    searchController = TextEditingController(); // Initialize searchController
-
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Material(
-                  elevation: 4, // Set elevation
-                  borderRadius: BorderRadius.circular(25.0), // Apply border radius
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: searchController,
-                          keyboardType: TextInputType.text,
-                          onChanged: (value) {},
-                          validator: (value) {
-                            if (value?.isEmpty ?? true) {
-                              return 'Search must not be empty';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Find your favourite plant here',
-                            prefixIcon: Icon(Icons.search),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             SizedBox(height: 20),
             Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 0.0, 250.0, 0.0), // Adjust right padding
-              child: DropdownButton<String>(
-                onChanged: (String? value) {
-                  // Handle dropdown value change
-                },
-                hint: Text('Categories'), // Set hint text
-                items: <String>['Indoor', 'Outdoor', 'Seeds', 'Tools']
-                    .map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Material(
+                elevation: 4,
+                borderRadius: BorderRadius.circular(25.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: searchController,
+                        keyboardType: TextInputType.text,
+                        onChanged: (value) {},
+                        validator: (value) {
+                          if (value?.isEmpty ?? true) {
+                            return 'Search must not be empty';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'Find your favourite plant here',
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-
-
+            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: TopPickWidget(onNavigate: _navigateToPage, selectedCategory: _selectedCategory),
+            ),
             SizedBox(height: 20),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisExtent: 330,
-                    crossAxisSpacing: 6,
-                  ),
-                  itemCount: plantsData.length,
-                  itemBuilder: (context, index) {
-                    var product = plantsData[index];
-                    return ProductCard(
-                        image: product['image'], // Ensure this key exists
-                        name: product['name'],
-                    indoor___outdoor: product['indoor___outdoor']);
-                  },
-                ),
+              child: PageView(
+                controller: pageController,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  SeedsScreen(),
+                  HerbsScreen(),
+                  VegetablesScreen(),
+                ],
               ),
             ),
           ],
@@ -123,45 +98,49 @@ class _StoreScreenState extends State<StoreScreen> {
   }
 }
 
-Widget defaultFormField({
-  required TextEditingController controller,
-  required TextInputType type,
-  required void Function(String)? onChanged,
-  required String? Function(String?) validation,
-  required String label,
-  required IconData prefix,
-}) {
-  OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(25.0),
-    borderSide: BorderSide(
-      color: Colors.white70,
-      width: 2.0,
-    ),
-  );
-  return TextFormField(
-    controller: controller,
-    keyboardType: type,
-    onChanged: onChanged,
-    validator: validation,
-    decoration: InputDecoration(
-      labelText: label,
-      suffixIcon: CircleAvatar(
-        backgroundColor: Colors.green[900],
-        child: Icon(Icons.search, color: Colors.white),
-      ),
-      border: border,
-      focusedBorder: border,
-      enabledBorder: border,
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      fillColor: Colors.white,
-      filled: true,
-    ),
-  );
+class TopPickWidget extends StatefulWidget {
+  final Function(int) onNavigate;
+   String? selectedCategory;
+
+   TopPickWidget({
+    Key? key,
+    required this.onNavigate,
+    required this.selectedCategory,
+  }) : super(key: key);
+
+  @override
+  _TopPickWidgetState createState() => _TopPickWidgetState();
+}
+
+class _TopPickWidgetState extends State<TopPickWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: widget.selectedCategory,
+      onChanged: (String? newValue) {
+        setState(() {
+          widget.selectedCategory = newValue;
+        });
+        switch (newValue) {
+          case 'Flowers':
+            widget.onNavigate(0);
+            break;
+          case 'Herbs':
+            widget.onNavigate(1);
+            break;
+          case 'Vegetables':
+            widget.onNavigate(2);
+            break;
+        }
+      },
+      hint: Text('Categories'), // Add hint text
+      items: <String?>['Flowers', 'Herbs', 'Vegetables']
+          .map<DropdownMenuItem<String>>((String? value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value ?? 'Categories'), // Default text when value is null
+        );
+      }).toList(),
+    );
+  }
 }

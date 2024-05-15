@@ -99,7 +99,7 @@ class CustomGreetingWidget extends StatelessWidget {
                   text: TextSpan(
                     text: 'Good morning',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.green[900],
                       fontSize: ScreenUtil().setSp(18), // Responsive font size
                       fontWeight: FontWeight.bold,
                     ),

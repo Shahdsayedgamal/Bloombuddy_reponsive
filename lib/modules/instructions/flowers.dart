@@ -105,7 +105,7 @@ class Flowersdesign extends StatelessWidget {
                     name,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -114,7 +114,16 @@ class Flowersdesign extends StatelessWidget {
                     indoor___outdoor,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Estimated time to grow:",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -123,11 +132,11 @@ class Flowersdesign extends StatelessWidget {
                     estimated_time_to_grow,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 8),
+
                   const Align(
                     alignment: Alignment.centerRight,
                     child: Icon(Icons.favorite, color: Colors.white),
