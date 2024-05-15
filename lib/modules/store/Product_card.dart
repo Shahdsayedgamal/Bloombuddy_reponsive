@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class ProductCard extends StatefulWidget {
   final String name ;
   final String image ;
-  final String indoor_outdoor ;
+  final String indoor___outdoor ;
   // Add any required fields if you need to pass data to the ProductCard
-  const ProductCard({Key? key, required this.name, required this.image, required this.indoor_outdoor}) : super(key: key);
+  const ProductCard({Key? key, required this.name, required this.image, required this.indoor___outdoor}) : super(key: key);
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -43,7 +43,7 @@ class _ProductCardState extends State<ProductCard> {
                   ),
                   const SizedBox(height: 8),
                    Text(
-                    widget.indoor_outdoor,
+                    widget.indoor___outdoor ,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -72,7 +72,7 @@ class _ProductCardState extends State<ProductCard> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16.0),
                         child: Image.network(
-                          widget.image, // Using the image URL from the passed property
+                          widget.image , // Using the image URL from the passed property
                           width: 120, // Adjust image width as needed
                           height: 120, // Ensure the image height matches the design
                           fit: BoxFit.cover,

@@ -13,12 +13,16 @@ class _StoreScreenState extends State<StoreScreen> {
   Future<void> getData() async {
     try {
       QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("test_plants").get();
+      await FirebaseFirestore.instance.collection("flowers").get();
       // Convert documents to Map and store in state variable
       setState(
             () {
           plantsData = querySnapshot.docs
               .map((doc) => doc.data() as Map<String, dynamic>)
+              .where((data) =>
+          data['name'] != null &&
+              data['image'] != null &&
+              data['indoor___outdoor'] != null)
               .toList();
         },
       );
@@ -105,9 +109,9 @@ class _StoreScreenState extends State<StoreScreen> {
                   itemBuilder: (context, index) {
                     var product = plantsData[index];
                     return ProductCard(
-                        image: product['Picture'], // Ensure this key exists
-                        name: product['Name'],
-                    indoor_outdoor: product['Indoor_Outdoor']);
+                        image: product['image'], // Ensure this key exists
+                        name: product['name'],
+                    indoor___outdoor: product['indoor___outdoor']);
                   },
                 ),
               ),

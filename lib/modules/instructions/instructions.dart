@@ -1,15 +1,43 @@
-import 'package:bloom_buddy/modules/instructions/plant_guide.dart';
+import 'package:bloom_buddy/modules/instructions/vegetables.dart';
 import 'package:flutter/material.dart';
 import '../home/last_Arrival.dart';
+import 'flowers.dart';
+import 'herbs.dart';
+import 'plant_guide.dart';
 
+class InstructionsScreen extends StatefulWidget {
+  @override
+  _InstructionsScreenState createState() => _InstructionsScreenState();
+}
 
-class InstructionsScreen extends StatelessWidget {
+class _InstructionsScreenState extends State<InstructionsScreen> {
+  late TextEditingController searchController;
+  late PageController pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    searchController = TextEditingController();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    pageController.dispose();
+    super.dispose();
+  }
+
+  void _navigateToPage(int index) {
+    pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    late TextEditingController searchController;
-
-    searchController = TextEditingController(); // Initialize searchController
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -19,8 +47,8 @@ class InstructionsScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Material(
-                elevation: 4, // Set elevation
-                borderRadius: BorderRadius.circular(25.0), // Apply border radius
+                elevation: 4,
+                borderRadius: BorderRadius.circular(25.0),
                 child: Row(
                   children: [
                     Expanded(
@@ -47,23 +75,18 @@ class InstructionsScreen extends StatelessWidget {
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: TopPickWidget(),
+              child: TopPickWidget(onNavigate: _navigateToPage),
             ),
             SizedBox(height: 20),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisExtent: 330,
-                    crossAxisSpacing: 6,
-                  ),
-                  itemCount: 25,
-                  itemBuilder: (context, index) {
-                    return Plantguide();
-                  },
-                ),
+              child: PageView(
+                controller: pageController,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                   FlowersScreen(),
+                   HerbsScreen(),
+                  VegetablesScreen(),
+                ],
               ),
             ),
           ],
@@ -74,104 +97,59 @@ class InstructionsScreen extends StatelessWidget {
 }
 
 class TopPickWidget extends StatelessWidget {
+  final Function(int) onNavigate;
+
+  const TopPickWidget({
+    Key? key,
+    required this.onNavigate,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(right: 8.0),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.green,
-                width: 2.0,
-              ),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              'Top Pick',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+        ElevatedButton(
+          onPressed: () => onNavigate(0),
+          child: Text('Flowers'),
         ),
-        SizedBox(width: 20),
-        Text(
-          'Indoor',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.normal,
-          ),
+        ElevatedButton(
+          onPressed: () => onNavigate(1),
+          child: Text('Herbs'),
         ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            '|',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
-        Text(
-          'Outdoor',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.normal,
-          ),
+        ElevatedButton(
+          onPressed: () => onNavigate(2),
+          child: Text('Vegetables'),
         ),
       ],
     );
   }
 }
 
-Widget defaultFormField({
-  required TextEditingController controller,
-  required TextInputType type,
-  required void Function(String)? onChanged,
-  required String? Function(String?) validation,
-  required String label,
-  required IconData prefix,
-}) {
-  OutlineInputBorder border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(25.0),
-    borderSide: BorderSide(
-      color: Colors.white70,
-      width: 2.0,
-    ),
-  );
-  return TextFormField(
-    controller: controller,
-    keyboardType: type,
-    onChanged: onChanged,
-    validator: validation,
-    decoration: InputDecoration(
-      labelText: label,
-      suffixIcon: CircleAvatar(
-        backgroundColor: Colors.green[900],
-        child: Icon(Icons.search, color: Colors.white),
-      ),
-      border: border,
-      focusedBorder: border,
-      enabledBorder: border,
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(25.0),
-        borderSide: BorderSide(color: Colors.red),
-      ),
-      fillColor: Colors.white,
-      filled: true,
-    ),
-  );
+class PlantguidePage extends StatefulWidget {
+  final String title;
+
+  const PlantguidePage({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  State<PlantguidePage> createState() => _PlantguidePageState();
 }
+
+class _PlantguidePageState extends State<PlantguidePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Text('${widget.title} Page'),
+      ),
+    );
+  }
+}
+
+
