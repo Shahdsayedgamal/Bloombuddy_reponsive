@@ -4,25 +4,25 @@ import 'package:flutter/material.dart';
 import 'Product_card.dart';
 import 'add_cart.dart';
 
-class SeedsScreen extends StatefulWidget {
+class ToolsScreen extends StatefulWidget {
   @override
-  State<SeedsScreen> createState() => _SeedsScreenState();
+  State<ToolsScreen> createState() => _ToolsScreenState();
 }
 
-class _SeedsScreenState extends State<SeedsScreen> {
+class _ToolsScreenState extends State<ToolsScreen> {
   List<Map<String, dynamic>> plantsData = [];
 
   Future<void> getData() async {
     try {
       QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("seeds_store").get();
+      await FirebaseFirestore.instance.collection("Tools_store").get();
       setState(() {
         plantsData = querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
             .where((data) =>
         data['name'] != null &&
             data['picture'] != null &&
-           // data['description'] != null &&
+            // data['description'] != null &&
             data['price'] != null)
             .toList();
       });
@@ -55,10 +55,10 @@ class _SeedsScreenState extends State<SeedsScreen> {
                 itemCount: plantsData.length,
                 itemBuilder: (context, index) {
                   var product = plantsData[index];
-                  return Seedsdesign(
+                  return Toolsdesign(
                     name: product['name'] ?? '',
                     picture: product['picture'] ?? '',
-                   // description: product['description'] ?? '',
+                    // description: product['description'] ?? '',
                     price: product['price']?.toString() ?? '',
                   );
                 },
@@ -71,17 +71,17 @@ class _SeedsScreenState extends State<SeedsScreen> {
   }
 }
 
-class Seedsdesign extends StatelessWidget {
+class Toolsdesign extends StatelessWidget {
   final String name;
   final String picture;
   //final String description;
   final String price;
 
-  const Seedsdesign({
+  const Toolsdesign({
     Key? key,
     required this.name,
     required this.picture,
-   // required this.description,
+    // required this.description,
     required this.price
   }) : super(key: key);
 

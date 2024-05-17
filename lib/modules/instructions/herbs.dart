@@ -18,9 +18,9 @@ class _HerbsScreenState extends State<HerbsScreen> {
             .map((doc) => doc.data() as Map<String, dynamic>)
             .where((data) =>
         data['name'] != null &&
-            data['image'] != null &&
+            data['picture_link'] != null &&
             data['estimated_time'] != null &&
-            data['indoor___outdoor'] != null)
+            data['indoor_outdoor'] != null)
             .toList();
       });
     } catch (e) {
@@ -54,9 +54,9 @@ class _HerbsScreenState extends State<HerbsScreen> {
                   var product = plantsData[index];
                   return Herbsdesign(
                     name: product['name'] ?? '',
-                    image: product['image'] ?? '',
+                    picture_link: product['picture_link'] ?? '',
                     estimated_time: product['estimated_time'] ?? '',
-                    indoor___outdoor: product['indoor___outdoor'] ?? '',
+                    indoor_outdoor: product['indoor_outdoor'] ?? '',
                   );
                 },
               ),
@@ -70,15 +70,15 @@ class _HerbsScreenState extends State<HerbsScreen> {
 
 class Herbsdesign extends StatelessWidget {
   final String name;
-  final String image;
-  final String indoor___outdoor;
+  final String picture_link;
+  final String indoor_outdoor;
   final String estimated_time;
 
   const Herbsdesign({
     Key? key,
     required this.name,
-    required this.image,
-    required this.indoor___outdoor,
+    required this.picture_link,
+    required this.indoor_outdoor,
     required this.estimated_time
   }) : super(key: key);
 
@@ -111,7 +111,7 @@ class Herbsdesign extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    indoor___outdoor,
+                    indoor_outdoor,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
@@ -148,7 +148,7 @@ class Herbsdesign extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16.0),
                         child: Image.network(
-                          image,
+                          picture_link,
                           width: 120,
                           height: 120,
                           fit: BoxFit.cover,

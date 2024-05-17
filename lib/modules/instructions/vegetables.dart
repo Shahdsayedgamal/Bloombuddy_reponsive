@@ -18,9 +18,9 @@ class _VegetablesScreenState extends State<VegetablesScreen> {
             .map((doc) => doc.data() as Map<String, dynamic>)
             .where((data) =>
         data['name'] != null &&
-            data['image'] != null &&
-            data['estimated_time'] != null &&
-            data['indoor___outdoor'] != null)
+            data['picture'] != null &&
+            data['estimated_time_to_grow'] != null &&
+            data['indoor_outdoor'] != null)
             .toList();
       });
     } catch (e) {
@@ -54,9 +54,9 @@ class _VegetablesScreenState extends State<VegetablesScreen> {
                   var product = plantsData[index];
                   return Vegetablesdesign(
                     name: product['name'] ?? '',
-                    image: product['image'] ?? '',
-                    estimated_time: product['estimated_time'] ?? '',
-                    indoor___outdoor: product['indoor___outdoor'] ?? '',
+                    picture: product['picture'] ?? '',
+                    estimated_time_to_grow: product['estimated_time_to_grow'] ?? '',
+                    indoor_outdoor: product['indoor_outdoor'] ?? '',
                   );
                 },
               ),
@@ -70,16 +70,16 @@ class _VegetablesScreenState extends State<VegetablesScreen> {
 
 class Vegetablesdesign extends StatelessWidget {
   final String name;
-  final String image;
-  final String indoor___outdoor;
-  final String estimated_time;
+  final String picture;
+  final String indoor_outdoor;
+  final String estimated_time_to_grow;
 
   const Vegetablesdesign({
     Key? key,
     required this.name,
-    required this.image,
-    required this.indoor___outdoor,
-    required this.estimated_time
+    required this.picture,
+    required this.indoor_outdoor,
+    required this.estimated_time_to_grow
   }) : super(key: key);
 
   @override
@@ -111,7 +111,7 @@ class Vegetablesdesign extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    indoor___outdoor,
+                    indoor_outdoor,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
@@ -129,7 +129,7 @@ class Vegetablesdesign extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    estimated_time,
+                    estimated_time_to_grow,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
@@ -148,7 +148,7 @@ class Vegetablesdesign extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16.0),
                         child: Image.network(
-                          image,
+                          picture,
                           width: 120,
                           height: 120,
                           fit: BoxFit.cover,

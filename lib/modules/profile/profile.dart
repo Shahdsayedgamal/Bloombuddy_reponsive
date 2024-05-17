@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bloom_buddy/modules/profile/theme_provider.dart';
 import 'CustomListTitle.dart';
-import 'app_name_text.dart';
+import 'Privacy.dart';
+import 'favorite.dart';
+import 'order_details.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -10,9 +12,30 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false, // Remove the debug banner
+      theme: themeProvider.getIsDarkTheme ? ThemeData.dark() : ThemeData.light(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const ProfileScreenContent(),
+        '/order_details': (context) => OrderScreen(),
+        '/favorites': (context) => FavoriteScreen(),
+        '/privacy_terms': (context) => PrivacyScreen(),
+      },
+    );
+  }
+}
+
+class ProfileScreenContent extends StatelessWidget {
+  const ProfileScreenContent({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView( // Wrap with SingleChildScrollView
+        body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -26,9 +49,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
@@ -51,16 +72,14 @@ class ProfileScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        Text("Shahd sayed"), // Correct widget if needed
+                        Text("Shahd sayed"),
                         Text(
                           "eslam2002eslam@gmail.com",
-                          style: TextStyle(fontSize: 15), // Set appropriate style
+                          style: TextStyle(fontSize: 15),
                         ),
                       ],
                     ),
@@ -72,37 +91,25 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text("GENERAL"), // Correct widget if needed
+                    const Text("GENERAL"),
                     CustomListTile(
                       imagePath: "assets/images/profile2.jpg",
-                      text: "ALL ORDERS",
-                      function: () {},
-                    ),
-                    CustomListTile(
-                      imagePath: "assets/images/profile2.jpg",
-                      text: "VIEWED RECENTLY",
-                      function: () {},
-                    ),
-                    CustomListTile(
-                      imagePath: "assets/images/profile2.jpg",
-                      text: "ADDRESS",
-                      function: () {},
+                      text: "ORDER DETAILS",
+                      function: () {
+                        Navigator.pushNamed(context, '/order_details');
+                      },
                     ),
                     CustomListTile(
                       imagePath: "assets/images/profile2.jpg",
                       text: "FAVORITES",
-                      function: () {},
+                      function: () {
+                        Navigator.pushNamed(context, '/favorites');
+                      },
                     ),
-                    const SizedBox(
-                      height: 0,
-                    ),
-                    const Divider(
-                      thickness: 4,
-                    ),
-                    const SizedBox(
-                      height: 0,
-                    ),
-                    const Text("Setting"), // Correct widget if needed
+                    const SizedBox(height: 0),
+                    const Divider(thickness: 4),
+                    const SizedBox(height: 0),
+                    const Text("Setting"),
                     SwitchListTile(
                       secondary: Image.asset(
                         "assets/images/profile2.jpg",
@@ -116,16 +123,14 @@ class ProfileScreen extends StatelessWidget {
                         themeProvider.setDarkTheme(themeValue: value);
                       },
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    const Divider(
-                      thickness: 4,
-                    ),
+                    const SizedBox(height: 10),
+                    const Divider(thickness: 4),
                     CustomListTile(
                       imagePath: "assets/images/profile2.jpg",
-                      text: "privacy and terms",
-                      function: () {},
+                      text: "PRIVACY AND TERMS",
+                      function: () {
+                        Navigator.pushNamed(context, '/privacy_terms');
+                      },
                     ),
                   ],
                 ),
@@ -141,16 +146,15 @@ class ProfileScreen extends StatelessWidget {
                   onPressed: () {},
                   icon: const Icon(
                     Icons.login,
-                    color: Colors.white, // Set icon color to white
+                    color: Colors.white,
                   ),
-                  label: Text(
+                  label: const Text(
                     "LOGIN",
-                    style: TextStyle(color: Colors.white), // Set text color to white
+                    style: TextStyle(color: Colors.white),
                   ),
-      
                 ),
               ),
-              const SizedBox(height: 20), // Add extra space at the bottom if needed
+              const SizedBox(height: 20),
             ],
           ),
         ),

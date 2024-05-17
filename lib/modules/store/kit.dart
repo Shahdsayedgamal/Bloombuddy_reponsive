@@ -4,25 +4,25 @@ import 'package:flutter/material.dart';
 import 'Product_card.dart';
 import 'add_cart.dart';
 
-class SeedsScreen extends StatefulWidget {
+class KitScreen extends StatefulWidget {
   @override
-  State<SeedsScreen> createState() => _SeedsScreenState();
+  State<KitScreen> createState() => _KitScreenState();
 }
 
-class _SeedsScreenState extends State<SeedsScreen> {
+class _KitScreenState extends State<KitScreen> {
   List<Map<String, dynamic>> plantsData = [];
 
   Future<void> getData() async {
     try {
       QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("seeds_store").get();
+      await FirebaseFirestore.instance.collection("Kit_store").get();
       setState(() {
         plantsData = querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)
             .where((data) =>
         data['name'] != null &&
             data['picture'] != null &&
-           // data['description'] != null &&
+            // data['description'] != null &&
             data['price'] != null)
             .toList();
       });
@@ -55,10 +55,10 @@ class _SeedsScreenState extends State<SeedsScreen> {
                 itemCount: plantsData.length,
                 itemBuilder: (context, index) {
                   var product = plantsData[index];
-                  return Seedsdesign(
+                  return Kitdesign(
                     name: product['name'] ?? '',
                     picture: product['picture'] ?? '',
-                   // description: product['description'] ?? '',
+                    // description: product['description'] ?? '',
                     price: product['price']?.toString() ?? '',
                   );
                 },
@@ -71,17 +71,17 @@ class _SeedsScreenState extends State<SeedsScreen> {
   }
 }
 
-class Seedsdesign extends StatelessWidget {
+class Kitdesign extends StatelessWidget {
   final String name;
   final String picture;
   //final String description;
   final String price;
 
-  const Seedsdesign({
+  const Kitdesign({
     Key? key,
     required this.name,
     required this.picture,
-   // required this.description,
+    // required this.description,
     required this.price
   }) : super(key: key);
 

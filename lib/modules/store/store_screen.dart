@@ -1,9 +1,11 @@
 import 'package:bloom_buddy/modules/store/seeds.dart';
+import 'package:bloom_buddy/modules/store/tools.dart';
 import 'package:flutter/material.dart';
 import '../home/last_Arrival.dart';
 import '../instructions/flowers.dart';
 import '../instructions/herbs.dart';
 import '../instructions/vegetables.dart';
+import 'kit.dart';
 
 
 class StoreScreen extends StatefulWidget {
@@ -86,8 +88,8 @@ class _StoreScreenState extends State<StoreScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   SeedsScreen(),
-                  HerbsScreen(),
-                  VegetablesScreen(),
+                  KitScreen(),
+                  ToolsScreen(),
                 ],
               ),
             ),
@@ -122,19 +124,19 @@ class _TopPickWidgetState extends State<TopPickWidget> {
           widget.selectedCategory = newValue;
         });
         switch (newValue) {
-          case 'Flowers':
+          case 'Seeds':
             widget.onNavigate(0);
             break;
-          case 'Herbs':
+          case 'Kit':
             widget.onNavigate(1);
             break;
-          case 'Vegetables':
+          case 'Tools':
             widget.onNavigate(2);
             break;
         }
       },
       hint: Text('Categories'), // Add hint text
-      items: <String?>['Flowers', 'Herbs', 'Vegetables']
+      items: <String?>['Seeds', 'Kit', 'Tools']
           .map<DropdownMenuItem<String>>((String? value) {
         return DropdownMenuItem<String>(
           value: value,
