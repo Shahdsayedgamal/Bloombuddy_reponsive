@@ -9,6 +9,7 @@ class PrivacyScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
+
         ),
       ),
       body: Center(

@@ -114,7 +114,7 @@ class Toolsdesign extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    'LE $price',
+                    ' $price',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,

@@ -15,7 +15,7 @@ class _KitScreenState extends State<KitScreen> {
   Future<void> getData() async {
     try {
       QuerySnapshot querySnapshot =
-      await FirebaseFirestore.instance.collection("Kit_store").get();
+      await FirebaseFirestore.instance.collection("Ktis_store").get();
       setState(() {
         plantsData = querySnapshot.docs
             .map((doc) => doc.data() as Map<String, dynamic>)

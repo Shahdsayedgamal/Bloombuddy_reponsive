@@ -120,7 +120,7 @@ class Flowersdesign extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Estimated time to grow:",
+                    "Time to grow:",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15,
