@@ -154,7 +154,7 @@ class FlowersDesign extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-      padding: EdgeInsets.all(screenWidth * 0.03),
+      padding: EdgeInsets.all(screenWidth * 0.02),
       decoration: BoxDecoration(
         color: Colors.green.shade900,
         borderRadius: BorderRadius.circular(12),
@@ -169,7 +169,7 @@ class FlowersDesign extends StatelessWidget {
                 name,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: screenWidth * 0.045, // Adjust font size
+                  fontSize: screenWidth * 0.035, // Adjust font size
                   fontWeight: FontWeight.bold,
                 ),
               ),
