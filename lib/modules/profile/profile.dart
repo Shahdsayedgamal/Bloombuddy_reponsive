@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bloom_buddy/modules/profile/theme_provider.dart';
 import 'CustomListTitle.dart';
-import 'Privacy.dart';
 import 'favorite.dart';
 import 'order_details.dart';
 
@@ -21,7 +20,7 @@ class ProfileScreen extends StatelessWidget {
         '/': (context) => const ProfileScreenContent(),
         '/order_details': (context) => OrderScreen(),
         '/favorites': (context) => FavoriteScreen(),
-        '/privacy_terms': (context) => PrivacyScreen(),
+
       },
     );
   }
@@ -124,37 +123,30 @@ class ProfileScreenContent extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 10),
-                    const Divider(thickness: 4),
-                    CustomListTile(
-                      imagePath: "assets/images/profile2.jpg",
-                      text: "PRIVACY AND TERMS",
-                      function: () {
-                        Navigator.pushNamed(context, '/privacy_terms');
-                      },
-                    ),
+
                   ],
                 ),
               ),
-              Center(
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[900],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.login,
-                    color: Colors.white,
-                  ),
-                  label: const Text(
-                    "LOGIN",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+              // Center(
+              //   child: ElevatedButton.icon(
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: Colors.green[900],
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(30),
+              //       ),
+              //     ),
+              //     onPressed: () {},
+              //     icon: const Icon(
+              //       Icons.login,
+              //       color: Colors.white,
+              //     ),
+              //     label: const Text(
+              //       "LOGIN",
+              //       style: TextStyle(color: Colors.white),
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(height: 20),
             ],
           ),
         ),

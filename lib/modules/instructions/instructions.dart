@@ -1,8 +1,5 @@
-import 'package:bloom_buddy/modules/instructions/vegetables.dart';
 import 'package:flutter/material.dart';
-import '../home/last_Arrival.dart';
 import 'flowers.dart';
-import 'herbs.dart';
 
 
 class InstructionsScreen extends StatefulWidget {
@@ -12,28 +9,37 @@ class InstructionsScreen extends StatefulWidget {
 
 class _InstructionsScreenState extends State<InstructionsScreen> {
   late TextEditingController searchController;
-  late PageController pageController;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
-    pageController = PageController();
   }
 
   @override
   void dispose() {
     searchController.dispose();
-    pageController.dispose();
     super.dispose();
   }
 
-  void _navigateToPage(int index) {
-    pageController.animateToPage(
-      index,
-      duration: Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+  void _onSearchChanged() {
+    setState(() {});
+  }
+
+  void _onCategorySelected(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  Widget _buildCategoryPage() {
+    switch (_selectedIndex) {
+      case 0:
+        return FlowersScreen(searchQuery: searchController.text);
+      default:
+        return Center(child: Text('Select a category'));
+    }
   }
 
   @override
@@ -55,7 +61,7 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
                       child: TextFormField(
                         controller: searchController,
                         keyboardType: TextInputType.text,
-                        onChanged: (value) {},
+                        onChanged: (value) => _onSearchChanged(),
                         validator: (value) {
                           if (value?.isEmpty ?? true) {
                             return 'Search must not be empty';
@@ -73,21 +79,8 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
               ),
             ),
             SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: TopPickWidget(onNavigate: _navigateToPage),
-            ),
-            SizedBox(height: 20),
             Expanded(
-              child: PageView(
-                controller: pageController,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                   FlowersScreen(),
-                   HerbsScreen(),
-                  VegetablesScreen(),
-                ],
-              ),
+              child: _buildCategoryPage(),
             ),
           ],
         ),
@@ -95,61 +88,3 @@ class _InstructionsScreenState extends State<InstructionsScreen> {
     );
   }
 }
-
-class TopPickWidget extends StatelessWidget {
-  final Function(int) onNavigate;
-
-  const TopPickWidget({
-    Key? key,
-    required this.onNavigate,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        ElevatedButton(
-          onPressed: () => onNavigate(0),
-          child: Text('Flowers'),
-        ),
-        ElevatedButton(
-          onPressed: () => onNavigate(1),
-          child: Text('Herbs'),
-        ),
-        ElevatedButton(
-          onPressed: () => onNavigate(2),
-          child: Text('Vegetables'),
-        ),
-      ],
-    );
-  }
-}
-
-class PlantguidePage extends StatefulWidget {
-  final String title;
-
-  const PlantguidePage({
-    Key? key,
-    required this.title,
-  }) : super(key: key);
-
-  @override
-  State<PlantguidePage> createState() => _PlantguidePageState();
-}
-
-class _PlantguidePageState extends State<PlantguidePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Text('${widget.title} Page'),
-      ),
-    );
-  }
-}
-
-

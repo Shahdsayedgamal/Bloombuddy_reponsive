@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 import 'package:card_swiper/card_swiper.dart';
 import '../instructions/instructions.dart'; // Adjust the path if needed
 import 'last_Arrival.dart'; // Assuming this imports your LatestArrivalProductsWidget
+import '../login/login_screen.dart'; // Import the login screen
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -74,6 +76,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
+        ),
+        floatingActionButton: Padding(
+          padding: EdgeInsets.all(8.0),
+          child:FloatingActionButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (route) => false,
+              );
+            },
+            backgroundColor: Colors.green[900], // Set background color
+            child: Icon(Icons.logout, color: Colors.white), // Set icon color
+          ),
+
         ),
       ),
     );

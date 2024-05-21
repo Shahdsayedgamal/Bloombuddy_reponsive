@@ -1,11 +1,8 @@
-import 'package:bloom_buddy/modules/store/seeds.dart';
-import 'package:bloom_buddy/modules/store/tools.dart';
 import 'package:flutter/material.dart';
 import '../home/last_Arrival.dart';
 import '../instructions/flowers.dart';
-import '../instructions/herbs.dart';
-import '../instructions/vegetables.dart';
 import 'kit.dart';
+
 
 
 class StoreScreen extends StatefulWidget {
@@ -79,7 +76,7 @@ class _StoreScreenState extends State<StoreScreen> {
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: TopPickWidget(onNavigate: _navigateToPage, selectedCategory: _selectedCategory),
+              // child: TopPickWidget(onNavigate: _navigateToPage, selectedCategory: _selectedCategory),
             ),
             SizedBox(height: 20),
             Expanded(
@@ -87,9 +84,7 @@ class _StoreScreenState extends State<StoreScreen> {
                 controller: pageController,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  SeedsScreen(),
                   KitScreen(),
-                  ToolsScreen(),
                 ],
               ),
             ),
@@ -100,49 +95,3 @@ class _StoreScreenState extends State<StoreScreen> {
   }
 }
 
-class TopPickWidget extends StatefulWidget {
-  final Function(int) onNavigate;
-   String? selectedCategory;
-
-   TopPickWidget({
-    Key? key,
-    required this.onNavigate,
-    required this.selectedCategory,
-  }) : super(key: key);
-
-  @override
-  _TopPickWidgetState createState() => _TopPickWidgetState();
-}
-
-class _TopPickWidgetState extends State<TopPickWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: widget.selectedCategory,
-      onChanged: (String? newValue) {
-        setState(() {
-          widget.selectedCategory = newValue;
-        });
-        switch (newValue) {
-          case 'Seeds':
-            widget.onNavigate(0);
-            break;
-          case 'Kit':
-            widget.onNavigate(1);
-            break;
-          case 'Tools':
-            widget.onNavigate(2);
-            break;
-        }
-      },
-      hint: Text('Categories'), // Add hint text
-      items: <String?>['Seeds', 'Kit', 'Tools']
-          .map<DropdownMenuItem<String>>((String? value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value ?? 'Categories'), // Default text when value is null
-        );
-      }).toList(),
-    );
-  }
-}

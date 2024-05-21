@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:bloom_buddy/layout/layout_app/bloom_layout.dart';
 import 'package:flutter/material.dart';
-
-import '../../layout/layout_app/bloom_layout.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
 import '../login/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -14,22 +13,76 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var passwordController = TextEditingController();
   var confirmPasswordController = TextEditingController();
   var formKey = GlobalKey<FormState>();
-  bool isPassword = true;
+  bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
 
-  void navigateAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => widget,
-        ),
-        (Route<dynamic> route) => false,
-      );
+  void navigateAndFinish(BuildContext context, Widget widget) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => widget,
+      ),
+          (Route<dynamic> route) => false,
+    );
+  }
 
-  void navigateTo(context, widget) => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => widget,
+  void navigateTo(BuildContext context, Widget widget) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => widget,
+      ),
+    );
+  }
+
+  Future<void> registerUser() async {
+    try {
+      final UserCredential credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      print('User registered: ${credential.user?.email}');
+      // Navigate to LoginScreen only after successful registration
+      navigateAndFinish(context, AppLayout());
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+      if (e.code == 'weak-password') {
+        errorMessage = 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = 'The account already exists for that email.';
+      } else {
+        errorMessage = 'An unknown error occurred: ${e.message}';
+      }
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Registration Error'),
+          content: Text(errorMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
         ),
       );
+    } catch (e) {
+      print(e);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Registration Error'),
+          content: Text('An error occurred. Please try again. Error: $e'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: 110.0,
-                      ),
+                      SizedBox(height: 110.0),
                       Text(
                         'Register',
                         style: TextStyle(
@@ -82,9 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      SizedBox(height: 30.0),
                       TextFormField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -108,139 +157,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(25),
-                            borderSide: BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Adjust border thickness
+                            borderSide: BorderSide(color: Colors.white, width: 2.0),
                           ),
                           fillColor: Colors.white.withOpacity(0.0),
                           filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                          // Bold white text
+                          labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                           enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                            // Adjust border thickness
+                            borderSide: BorderSide(color: Colors.white, width: 2.0),
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold), // Bold white text
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      TextFormField(
-                        controller: passwordController,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: isPassword,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Password must not be empty';
-                          }
-                          return null;
+                      SizedBox(height: 15.0),
+                      buildPasswordField(
+                        labelText: 'Password',
+                        isPasswordVisible: isPasswordVisible,
+                        onPressed: () {
+                          setState(() {
+                            isPasswordVisible = !isPasswordVisible;
+                          });
                         },
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.white,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              isPassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                isPassword = !isPassword;
-                              });
-                            },
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Adjust border thickness
-                          ),
-                          fillColor: Colors.white.withOpacity(0.0),
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                          // Bold white text
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                            // Adjust border thickness
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold), // Bold white text
                       ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      TextFormField(
-                        controller: confirmPasswordController,
-                        keyboardType: TextInputType.visiblePassword,
-                        obscureText: isPassword,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Confirm Password must not be empty';
-                          } else if (value != passwordController.text) {
-                            return 'Passwords do not match';
-                          }
-                          return null;
+                      SizedBox(height: 15.0),
+                      buildPasswordField(
+                        labelText: 'Confirm Password',
+                        isPasswordVisible: isConfirmPasswordVisible,
+                        onPressed: () {
+                          setState(() {
+                            isConfirmPasswordVisible = !isConfirmPasswordVisible;
+                          });
                         },
-                        decoration: InputDecoration(
-                          labelText: 'Confirm Password',
-                          prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.white,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              isPassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                isPassword = !isPassword;
-                              });
-                            },
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                                color: Colors.white,
-                                width: 2.0), // Adjust border thickness
-                          ),
-                          fillColor: Colors.white.withOpacity(0.0),
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                          // Bold white text
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.white, width: 2.0),
-                            // Adjust border thickness
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold), // Bold white text
                       ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
+                      SizedBox(height: 15.0),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -248,25 +197,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.white.withOpacity(0.3),
                         ),
                         child: MaterialButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              // Form validation successful
-                              print(emailController.text);
-                              print(passwordController.text);
-                              print(confirmPasswordController.text);
-                              navigateAndFinish(context, AppLayout());
+                              await registerUser();
                             }
                           },
-                          child: Text('REGISTER',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight:
-                                      FontWeight.bold)), // Bold white text
+                          child: Text('REGISTER', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),
                       ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
+                      SizedBox(height: 10.0),
                     ],
                   ),
                 ),
@@ -277,4 +216,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
+  Widget buildPasswordField({
+    required String labelText,
+    required bool isPasswordVisible,
+    required VoidCallback onPressed,
+  }) {
+    return TextFormField(
+        controller: labelText == 'Password' ? passwordController : confirmPasswordController,
+        keyboardType: TextInputType.visiblePassword,
+        obscureText: isPasswordVisible,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return '${labelText.toLowerCase()} must not be empty';
+        } else if (labelText == 'Confirm Password' && value != passwordController.text) {
+          return 'Passwords do not match';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: labelText,
+        prefixIcon: Icon(
+          Icons.lock,
+          color: Colors.white,
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(
+            isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.white,
+          ),
+          onPressed: onPressed,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(color: Colors.white, width: 2.0),
+        ),
+        fillColor: Colors.white.withOpacity(0.0),
+        filled: true,
+        labelStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.white, width: 2.0),
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+    );
+  }
 }
+
