@@ -1,13 +1,14 @@
+import 'package:bloom_buddy/layout/layout_app/bloom_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../layout/layout_app/bloom_layout.dart';
 import '../register/register_screen.dart';
+ // Import PlantLayout
 
 class LoginScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() =>
-      _LoginScreenState(); //holds data that can change, manages login screen, state of the login
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -23,6 +24,54 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         (Route<dynamic> route) => false,
       );
+
+  Future<void> loginUser(String emailAddress, String password) async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailAddress,
+        password: password,
+      );
+      navigateAndFinish(context,
+          AppLayout()); // Navigate to PlantLayout after successful login
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+      if (e.code == 'user-not-found') {
+        errorMessage = 'No user found for that email.';
+      } else if (e.code == 'wrong-password') {
+        errorMessage = 'Wrong password provided for that user.';
+      } else {
+        errorMessage = 'An unknown error occurred: ${e.message}';
+      }
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Login Error'),
+          content: Text(errorMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      print(e);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Login Error'),
+          content: Text('An error occurred. Please try again. Error: $e'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,9 +214,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
                               // Form validation successful
-                              print(emailController.text);
-                              print(passwordController.text);
-                              navigateAndFinish(context, AppLayout());
+                              loginUser(
+                                emailController.text,
+                                passwordController.text,
+                              );
                             }
                           },
                           child: Text('LOGIN',

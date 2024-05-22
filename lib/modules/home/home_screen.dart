@@ -129,16 +129,7 @@ class CustomGreetingWidget extends StatelessWidget {
                 SizedBox(
                   height: ScreenUtil().setHeight(8), // Responsive height
                 ),
-                Text(
-                  'Shahd sayed',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24), // Responsive font size
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(5), // Responsive height
-                ),
+
                 Row(
                   children: const [
                     Icon(Icons.wb_cloudy, color: Colors.grey, size: 24),

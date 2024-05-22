@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import '../store/kit.dart';
+import '../store/kit.dart'; // Adjust import as needed
 
 class FavoriteScreen extends StatefulWidget {
   @override

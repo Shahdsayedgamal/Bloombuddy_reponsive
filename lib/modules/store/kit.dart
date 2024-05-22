@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../profile/favorite.dart'; // Adjust import as needed
 import 'add_cart.dart';
 
 class KitScreen extends StatefulWidget {
@@ -12,8 +13,8 @@ class KitScreen extends StatefulWidget {
 
 class _KitScreenState extends State<KitScreen> {
   List<Map<String, dynamic>> plantsData = [];
-  List<String> collectionData = ["Ktis_store", "Tools_store", "seeds_store"];
-  String selectedCollection = "Ktis_store";
+  List<String> collectionData = ["Fertilizers_store", "Tools_store", "seeds_store", "Kits_store"];
+  String selectedCollection = "Tools_store";
 
   Future<void> getData() async {
     try {
@@ -40,61 +41,71 @@ class _KitScreenState extends State<KitScreen> {
 
   Future<void> toggleFavoriteStatus(Map<String, dynamic> product) async {
     final prefs = await SharedPreferences.getInstance();
-    final favoriteItemsJson = prefs.getStringList('favoriteItems') ?? [];
-    setState(() {
-      if (favoriteItemsJson.contains(jsonEncode(product))) {
-        favoriteItemsJson.remove(jsonEncode(product));
-      } else {
-        favoriteItemsJson.add(jsonEncode(product));
-      }
-    });
+    List<String> favoriteItemsJson = prefs.getStringList('favoriteItems') ?? [];
+
+    // Check if the product is already in favorites
+    bool isAlreadyFavorite = favoriteItemsJson.contains(jsonEncode(product));
+
+    // If the product is not already in favorites, add it
+    if (!isAlreadyFavorite) {
+      favoriteItemsJson.add(jsonEncode(product));
+    } else {
+      // If the product is already in favorites, remove it
+      favoriteItemsJson.remove(jsonEncode(product));
+    }
+
     await prefs.setStringList('favoriteItems', favoriteItemsJson);
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Column(
-              children: [
-                // Category Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: collectionData.map((collection) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          selectedCollection = collection;
-                          getData();
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: selectedCollection == collection ? Colors.white : Colors.green[900],
-                        backgroundColor: selectedCollection == collection ? Colors.green[900] : Colors.grey[200],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                      ),
-                      child: Text(
-                        collection.replaceAll('_store', ' '),
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: Column(
+                children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: collectionData.map((collection) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedCollection = collection;
+                              getData();
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: selectedCollection == collection ? Colors.white : Colors.green[900],
+                            backgroundColor: selectedCollection == collection ? Colors.green[900] : Colors.grey[200],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                          ),
+                          child: Text(
+                            collection.replaceAll('_store', ' '),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 10),
-          Expanded(
-            child: Padding(
+            SizedBox(height: 10),
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisExtent: 330,
@@ -110,8 +121,8 @@ class _KitScreenState extends State<KitScreen> {
                 },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -164,7 +175,7 @@ class _KitDesignState extends State<KitDesign> {
         child: Row(
           children: [
             SizedBox(width: 5),
-            Expanded(
+            Flexible(
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.7,
                 padding: const EdgeInsets.all(16.0),
@@ -212,7 +223,6 @@ class _KitDesignState extends State<KitDesign> {
                             },
                           ),
                         ),
-                        // SizedBox(height: 8),
                         Align(
                           alignment: Alignment.centerRight,
                           child: Padding(
@@ -240,4 +250,3 @@ class _KitDesignState extends State<KitDesign> {
     );
   }
 }
-

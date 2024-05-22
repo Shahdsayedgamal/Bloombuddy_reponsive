@@ -53,7 +53,7 @@ class PlantDetailPage extends StatelessWidget {
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.3,
                       child: Image.asset(
-                        'assets/images/Login.jpg',
+                        'assets/images/flower.jpeg',
                         fit: BoxFit.fitHeight,
                         width: double.infinity,
                       ),
