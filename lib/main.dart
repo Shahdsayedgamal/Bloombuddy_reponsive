@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
               isDarkTheme: themeProvider.getIsDarkTheme,
               context: context,
             ),
-            home: PlantDetailPage(),
+            home: AppLayout(),
            // routes: {"register": (context) => RegisterScreen(), "login": (context) => LoginScreen()},
           );
         },
