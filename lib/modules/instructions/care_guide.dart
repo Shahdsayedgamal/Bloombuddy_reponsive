@@ -1,104 +1,92 @@
-
 import 'package:flutter/material.dart';
 
-import 'instructions.dart';
-
-void navigateTo(context, widget) => Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => widget,
-  ),
-);
-
+void navigateTo(BuildContext context, Widget widget) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => widget),
+  );
+}
 
 class PlantDetailPage extends StatelessWidget {
+  final Map<String, dynamic> plantData;
+
+  const PlantDetailPage({Key? key, required this.plantData}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
+      appBar: AppBar(
         title: Text('Care Guide'),
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color: Colors.green[900],
-            ),
-            child: IconButton(
-              icon: Icon(Icons.arrow_back_rounded, color: Colors.white),
-              onPressed: () {
-                navigateTo(context, InstructionsScreen());
-              },
-            ),
+          padding: const EdgeInsets.only(left: 5.0),
+
+          child: IconButton(
+            icon: Icon(Icons.arrow_back_rounded, color: Colors.green[900]),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
         ),
       ),
       body: Container(
-        color: Colors.grey.shade300, // Set background color to light grey
-        padding: EdgeInsets.all(20), // Padding for the entire screen
+        color: Colors.grey.shade300,
+        padding: EdgeInsets.all(20),
         child: Container(
-          padding: EdgeInsets.all(14), // Padding for the white container
+          padding: EdgeInsets.all(14),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(25),
           ),
-          child: Column(
-            children: [
-              // White container for image and plant name
-              Column(
-                children: [
-                  // Image section
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(25),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      child: Image.asset(
-                        'assets/images/flower.jpeg',
-                        fit: BoxFit.fitHeight,
-                        width: double.infinity,
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.3,
+                        child: Image.network(
+                          plantData['picture'],
+                          fit: BoxFit.fitHeight,
+                          width: double.infinity,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 8), // Spacing
-                  // Plant name section
-                  Text(
-                    'Selected Plant Name', // Your plant name
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                    SizedBox(height: 8),
+                    Text(
+                      plantData['name'],
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
-              SizedBox(height: 20), // Spacing
-              // Grid section
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  // Padding for the white container
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: GridView.count(
-                    crossAxisCount: 2,
-                    // Two columns per row
-                    mainAxisSpacing: 40.0,
-                    crossAxisSpacing: 50.0,
-                    childAspectRatio: 1,
-                    // Adjusted aspect ratio for balanced layout
-                    children: [
-                      _buildGridItem('Season', context),
-                      _buildGridItem('Sun exposure', context),
-                      _buildGridItem('Watering', context),
-                      _buildGridItem('Growth', context),
-                      _buildGridItem('Preparation', context),
-                      _buildGridItem('How to plant', context),
-                      _buildGridItem('Fertilizing', context),
-                      _buildGridItem('Pruning', context),
-                      _buildGridItem('Monitoring', context),
-                    ],
-                  ),
+              SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    final labels = [
+                      'Season',
+                      'Sun exposure',
+                      'Watering',
+                      'Growth',
+                      'Preparation',
+                      'How to plant',
+                      'Fertilizing',
+                      'Pruning',
+                      'Monitoring'
+                    ];
+                    return _buildGridItem(labels[index], plantData);
+                  },
+                  childCount: 9,
                 ),
               ),
             ],
@@ -108,22 +96,26 @@ class PlantDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildGridItem(String label, BuildContext context) {
-    return GridItem(label: label, context: context);
+  Widget _buildGridItem(String label, Map<String, dynamic> plantData) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      child: GridItem(label: label, plantData: plantData),
+    );
   }
 }
 
 class GridItem extends StatefulWidget {
   final String label;
-  final BuildContext context;
+  final Map<String, dynamic> plantData;
 
-  GridItem({required this.label, required this.context});
+  GridItem({required this.label, required this.plantData});
+
   @override
   _GridItemState createState() => _GridItemState();
 }
 
 class _GridItemState extends State<GridItem> {
-  bool _isExpanded = true; // Initially set to true
+  bool _isExpanded = true;
 
   @override
   Widget build(BuildContext context) {
@@ -136,53 +128,57 @@ class _GridItemState extends State<GridItem> {
               builder: (context, setState) {
                 return AlertDialog(
                   contentPadding: EdgeInsets.all(20),
-                  content: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _getIconForLabel(widget.label),
-                          size: 50,
-                          color: _getIconColor(widget.label),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          widget.label,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                  content: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.8,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            _getIconForLabel(widget.label),
+                            size: 50,
+                            color: _getIconColor(widget.label),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          'Detailed information about ${widget.label.toLowerCase()} goes here. duwegsiusjn usg8fs8ufe '
-                              'jiebufgywhf fehfygsfosjfjs fnieshucmsafjoisf bfiushfo',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 14),
-                          maxLines: _isExpanded ? null : 100,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isExpanded = !_isExpanded; // Toggle _isExpanded
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
+                          SizedBox(height: 10),
+                          Text(
+                            widget.label,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Flexible(
                             child: Text(
-                              !_isExpanded ? 'Show Less' : 'Show More',
-                              // Reverse button text
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.green[900],
-                                decoration: TextDecoration.underline,
+                              _getDetailForLabel(widget.label),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 14),
+                              maxLines: _isExpanded ? null : 100,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isExpanded = !_isExpanded;
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Text(
+                                !_isExpanded ? 'Show Less' : 'Show More',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.green[900],
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -194,8 +190,8 @@ class _GridItemState extends State<GridItem> {
       child: Material(
         elevation: 6,
         borderRadius: BorderRadius.circular(15.0),
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
+        child: Container(
+          padding: EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.shade400, width: 2),
             borderRadius: BorderRadius.circular(15.0),
@@ -222,6 +218,32 @@ class _GridItemState extends State<GridItem> {
       ),
     );
   }
+
+  String _getDetailForLabel(String label) {
+    switch (label) {
+      case 'Season':
+        return widget.plantData['season'];
+      case 'Sun exposure':
+        return widget.plantData['sun_exposing'];
+      case 'Watering':
+        return widget.plantData['watering___sunlight'];
+      case 'Growth':
+        return widget.plantData['growth'] ?? 'N/A';
+      case 'Preparation':
+        return widget.plantData['preparation'];
+      case 'How to plant':
+        return widget.plantData['planting'];
+      case 'Fertilizing':
+        return widget.plantData['fertilizng'];
+      case 'Pruning':
+        return widget.plantData['pruning'];
+      case 'Monitoring':
+        return widget.plantData['monitoring'];
+      default:
+        return 'No details available.';
+    }
+  }
+
   IconData _getIconForLabel(String label) {
     switch (label) {
       case 'Season':

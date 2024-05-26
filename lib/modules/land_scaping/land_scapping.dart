@@ -14,30 +14,28 @@ class _LandscapeScreenState extends State<LandscapeScreen> {
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/login.jpg'), // Change to your image path
               fit: BoxFit.cover,
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 80),
-              Text(
-                'Landscape services',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+                Text(
+                  'Landscape services',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.03,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-
-              SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 35.0),
-                child: Container(
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                   ),
@@ -46,7 +44,7 @@ class _LandscapeScreenState extends State<LandscapeScreen> {
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                       child: Container(
-                        padding: const EdgeInsets.all(15.0), // Adjusted padding
+                        padding: const EdgeInsets.all(15.0),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(25.0),
@@ -159,14 +157,16 @@ class _LandscapeScreenState extends State<LandscapeScreen> {
                                 ),
                               ),
                             ),
+                            SizedBox(height: 20),
                           ],
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              ],
+            ),
           ),
         ),
       ),

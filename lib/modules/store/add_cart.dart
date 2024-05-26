@@ -18,9 +18,9 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
   Widget build(BuildContext context) {
 
     String shortDescription =
-        widget.product['description'] ?? 'Description not available.';
+        widget.product['description'] ?? 'High quality....';
     String longDescription = widget.product['longDescription'] ??
-        'Detailed description not available.';
+        'High quality....';
     String descriptionToShow =
     showFullDescription ? shortDescription : longDescription;
     String descriptionButtonText =

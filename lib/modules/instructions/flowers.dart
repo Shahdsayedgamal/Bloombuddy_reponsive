@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'care_guide.dart';
 
 class FlowersScreen extends StatefulWidget {
   final String searchQuery;
@@ -60,75 +61,91 @@ class _FlowersScreenState extends State<FlowersScreen> {
 
     return Scaffold(
       body: Column(
-          children: [
-      Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Column(
         children: [
-          // Category Buttons
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: collectionData.map((collection) {
-              return ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    selectedCollection = collection;
-                    getData(widget.searchQuery);
-                  });
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Column(
+              children: [
+                // Category Buttons
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: collectionData.map((collection) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          selectedCollection = collection;
+                          getData(widget.searchQuery);
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: selectedCollection == collection
+                            ? Colors.white
+                            : Colors.green[900],
+                        backgroundColor: selectedCollection == collection
+                            ? Colors.green[900]
+                            : Colors.grey[200],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                      child: Text(
+                        collection,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: screenWidth * 0.04, // Adjust font size
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: screenHeight * 0.01),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: screenWidth < 600 ? 2 : 3,
+                  // Responsive columns
+                  mainAxisExtent: screenHeight * 0.35,
+                  // Adjusted for responsiveness
+                  crossAxisSpacing: screenWidth * 0.02,
+                  // Responsive spacing
+                  mainAxisSpacing: screenHeight * 0.02, // Responsive spacing
+                ),
+                itemCount: plantsData.length,
+                itemBuilder: (context, index) {
+                  var product = plantsData[index];
+                  return GestureDetector(
+                    onTap: () {
+                      navigateTo(context, PlantDetailPage(
+                        // plantName: product['name'],
+                        // imageUrl: product['picture'],
+                        plantData: product,
+                      ));
+                    },
+                    child: FlowersDesign(
+                      name: product['name'],
+                      picture: product['picture'],
+                      estimated_time: product['estimated_time'],
+                      indoor_outdoor: product['indoor_outdoor'],
+                    ),
+                  );
                 },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: selectedCollection == collection
-                      ? Colors.white
-                      : Colors.green[900],
-                  backgroundColor: selectedCollection == collection
-                      ? Colors.green[900]
-                      : Colors.grey[200],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                ),
-                child: Text(
-                  collection,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: screenWidth * 0.04, // Adjust font size
-                  ),
-                ),
-              );
-            }).toList(),
+              ),
+            ),
           ),
         ],
       ),
-    ),
-    SizedBox(height: screenHeight * 0.01),
-    Expanded(
-    child: Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-    child: GridView.builder(
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: screenWidth < 600 ? 2 : 3,
-    // Responsive columns
-    mainAxisExtent: screenHeight * 0.35,
-    // Adjusted for responsiveness
-    crossAxisSpacing: screenWidth * 0.02,
-    // Responsive spacing
-      mainAxisSpacing: screenHeight * 0.02, // Responsive spacing
-    ),
-      itemCount: plantsData.length,
-      itemBuilder: (context, index) {
-        var product = plantsData[index];
-        return FlowersDesign(
-          name: product['name'],
-          picture: product['picture'],
-          estimated_time: product['estimated_time'],
-          indoor_outdoor: product['indoor_outdoor'],
-        );
-      },
-    ),
-    ),
-    ),
-          ],
-      ),
+    );
+  }
+
+  void navigateTo(BuildContext context, Widget widget) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => widget),
     );
   }
 }
@@ -173,12 +190,6 @@ class FlowersDesign extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // IconButton(
-              //   icon: Icon(
-              //     isFavorite ? Icons.favorite : Icons.favorite_border,
-              //     color: isFavorite ? Colors.red : Colors.white,
-              //   ),
-              // ),
             ],
           ),
           SizedBox(height: screenHeight * 0.005),
@@ -195,7 +206,7 @@ class FlowersDesign extends StatelessWidget {
             estimated_time,
             style: TextStyle(
               color: Colors.white,
-              fontSize: screenWidth * 0.05, // Adjust font size
+              fontSize: screenWidth * 0.04, // Adjust font size
               fontWeight: FontWeight.bold,
             ),
           ),

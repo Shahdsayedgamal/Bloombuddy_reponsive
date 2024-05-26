@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,23 +14,7 @@ class _KitScreenState extends State<KitScreen> {
   List<Map<String, dynamic>> plantsData = [];
   List<String> collectionData = ["Fertilizers_store", "Tools_store", "seeds_store", "Kits_store"];
   String selectedCollection = "Tools_store";
-
-  Future<void> getData() async {
-    try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(selectedCollection).get();
-      setState(() {
-        plantsData = querySnapshot.docs
-            .map((doc) => doc.data() as Map<String, dynamic>)
-            .where((data) =>
-        data['name'] != null &&
-            data['picture'] != null &&
-            data['price'] != null)
-            .toList();
-      });
-    } catch (e) {
-      print('Error fetching data: $e');
-    }
-  }
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -39,24 +22,33 @@ class _KitScreenState extends State<KitScreen> {
     getData();
   }
 
-  Future<void> toggleFavoriteStatus(Map<String, dynamic> product) async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> favoriteItemsJson = prefs.getStringList('favoriteItems') ?? [];
-
-    // Check if the product is already in favorites
-    bool isAlreadyFavorite = favoriteItemsJson.contains(jsonEncode(product));
-
-    // If the product is not already in favorites, add it
-    if (!isAlreadyFavorite) {
-      favoriteItemsJson.add(jsonEncode(product));
-    } else {
-      // If the product is already in favorites, remove it
-      favoriteItemsJson.remove(jsonEncode(product));
+  Future<void> getData() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(selectedCollection).get();
+      plantsData = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .where((data) =>
+      data['name'] != null &&
+          data['picture'] != null &&
+          data['price'] != null)
+          .toList();
+    } catch (e) {
+      print('Error fetching data: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
-
-    await prefs.setStringList('favoriteItems', favoriteItemsJson);
   }
 
+  Future<bool> isFavorite(Map<String, dynamic> product) async {
+    final prefs = await SharedPreferences.getInstance();
+    final favoriteItemsJson = prefs.getStringList('favoriteItems') ?? [];
+    return favoriteItemsJson.contains(jsonEncode(product));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +67,12 @@ class _KitScreenState extends State<KitScreen> {
                       children: collectionData.map((collection) {
                         return ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              selectedCollection = collection;
-                              getData();
-                            });
+                            if (selectedCollection != collection) {
+                              setState(() {
+                                selectedCollection = collection;
+                                getData();
+                              });
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: selectedCollection == collection ? Colors.white : Colors.green[900],
@@ -101,7 +95,9 @@ class _KitScreenState extends State<KitScreen> {
               ),
             ),
             SizedBox(height: 10),
-            Padding(
+            isLoading
+                ? Center(child: CircularProgressIndicator())
+                : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: GridView.builder(
                 shrinkWrap: true,
@@ -114,9 +110,22 @@ class _KitScreenState extends State<KitScreen> {
                 itemCount: plantsData.length,
                 itemBuilder: (context, index) {
                   var product = plantsData[index];
-                  return KitDesign(
-                    product: product,
-                    onFavoriteToggle: () => toggleFavoriteStatus(product),
+                  return FutureBuilder<bool>(
+                    key: UniqueKey(),
+                    future: isFavorite(product),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text("Error: ${snapshot.error}"));
+                      } else {
+                        bool isFavorite = snapshot.data ?? false;
+                        return KitDesign(
+                          product: product,
+                          isFavorite: isFavorite,
+                        );
+                      }
+                    },
                   );
                 },
               ),
@@ -130,12 +139,12 @@ class _KitScreenState extends State<KitScreen> {
 
 class KitDesign extends StatefulWidget {
   final Map<String, dynamic> product;
-  final VoidCallback onFavoriteToggle;
+  final bool isFavorite;
 
   const KitDesign({
     Key? key,
     required this.product,
-    required this.onFavoriteToggle,
+    required this.isFavorite,
   }) : super(key: key);
 
   @override
@@ -143,20 +152,28 @@ class KitDesign extends StatefulWidget {
 }
 
 class _KitDesignState extends State<KitDesign> {
-  bool isFavorite = false;
+  late ValueNotifier<bool> isFavoriteNotifier;
 
   @override
   void initState() {
     super.initState();
-    checkFavoriteStatus();
+    isFavoriteNotifier = ValueNotifier<bool>(widget.isFavorite);
   }
 
-  Future<void> checkFavoriteStatus() async {
+  Future<void> toggleFavoriteStatus() async {
     final prefs = await SharedPreferences.getInstance();
-    final favoriteItemsJson = prefs.getStringList('favoriteItems') ?? [];
-    setState(() {
-      isFavorite = favoriteItemsJson.contains(jsonEncode(widget.product));
-    });
+    List<String> favoriteItemsJson = prefs.getStringList('favoriteItems') ?? [];
+
+    bool isAlreadyFavorite = favoriteItemsJson.contains(jsonEncode(widget.product));
+
+    if (!isAlreadyFavorite) {
+      favoriteItemsJson.add(jsonEncode(widget.product));
+    } else {
+      favoriteItemsJson.remove(jsonEncode(widget.product));
+    }
+
+    await prefs.setStringList('favoriteItems', favoriteItemsJson);
+    isFavoriteNotifier.value = !isFavoriteNotifier.value;
   }
 
   @override
@@ -210,16 +227,16 @@ class _KitDesignState extends State<KitDesign> {
                       children: [
                         Align(
                           alignment: Alignment.centerRight,
-                          child: IconButton(
-                            icon: Icon(
-                              isFavorite ? Icons.favorite : Icons.favorite_border,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                isFavorite = !isFavorite;
-                              });
-                              widget.onFavoriteToggle();
+                          child: ValueListenableBuilder<bool>(
+                            valueListenable: isFavoriteNotifier,
+                            builder: (context, isFavorite, child) {
+                              return IconButton(
+                                icon: Icon(
+                                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                                  color: Colors.white,
+                                ),
+                                onPressed: toggleFavoriteStatus,
+                              );
                             },
                           ),
                         ),
